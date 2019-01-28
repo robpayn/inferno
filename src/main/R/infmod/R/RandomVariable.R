@@ -1,7 +1,7 @@
 # Package dependencies ####
 
-# All RandomVariable classes are R6 classes.
-library(R6);
+#' @importFrom R6 R6Class
+NULL
 
 # Class RandomVariable (R6) ####
 
@@ -14,7 +14,7 @@ library(R6);
 #' 
 #' @usage Abstract
 #' @export
-RandomVariable <- R6::R6Class(
+RandomVariable <- R6Class(
    classname = "RandomVariable",
    public = list(
       density = function(val, log)
@@ -52,7 +52,7 @@ NULL
 #' @param max Maximum value for the uniform distribution
 #' @return The object of class \code{RVUniform} created
 #'    by the constructor
-RVUniform <- R6::R6Class(
+RVUniform <- R6Class(
    classname = "RVUniform",
    inherit = RandomVariable,
    public = list(
@@ -101,7 +101,7 @@ NULL
 #' @param sd Standard deviation of the uniform distribution
 #' @return The object of class \code{RVNormal} created
 #'    by the constructor
-RVNormal <- R6::R6Class(
+RVNormal <- R6Class(
    classname = "RVNormal",
    inherit = RandomVariable,
    public = list(

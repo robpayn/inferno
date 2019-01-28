@@ -1,9 +1,8 @@
 # Package dependencies ####
 
-# All RandomVariable classes are R6 classes.
-library(R6);
-# Uses tools for multivariate distributions from MASS
-library(MASS);
+#' @importFrom R6 R6Class
+#' @importFrom MASS mvrnorm
+NULL
 
 # Class Criterion (R6) ####
 
@@ -19,7 +18,7 @@ library(MASS);
 #' 
 #' @usage Abstract
 #' @export
-Criterion <- R6::R6Class(
+Criterion <- R6Class(
    classname = "Criterion",
    public = list(
       isAccepted = function(prob, probRef)
@@ -39,7 +38,7 @@ Criterion <- R6::R6Class(
 #' 
 #' @usage \code{StatsLogger$new(...)} (constructor)
 #' @export
-CriterionMetropLogLikelihood <- R6::R6Class(
+CriterionMetropLogLikelihood <- R6Class(
    classname = "CriterionMetropLogLikelihood",
    inherit = Criterion,
    public = list(
@@ -57,21 +56,26 @@ CriterionMetropLogLikelihood <- R6::R6Class(
 
 # Class StatsLogger (R6) ####
 
-#' Markov Chain stats logging tool
+#' @export
 #' 
+#' @title
+#'    Markov Chain stats logging tool
+#' 
+#' @description
 #' Logs the stats from a Markov Chain accpet/reject algorithm. Stats
 #' are logged both to a matrix in memory and written to files, if configured
 #' to do so.
 #' 
-#' @export
-#' @usage \code{StatsLogger$new(...)} (constructor)
+#' @usage 
+#'    StatsLogger$new(...)
 #' @param filePath
 #'    Optional argument to set the path to which output files are written
 #' @param statsFile
 #'    Name of the file with logged stats data
+#'    
 #' @return The object of class \code{StatsLogger} created
 #'    by the constructor
-StatsLogger <- R6::R6Class(
+StatsLogger <- R6Class(
    classname = "StatsLogger",
    public = list(
       numRows = NULL,
@@ -159,6 +163,33 @@ StatsLogger <- R6::R6Class(
    )
 );
 
+# Roxygen Method StatsLogger_buildLog ####
+
+#' @name 
+#'    StatsLogger_buildLog
+#' @title 
+#'    Build the logger data structures and files
+#' 
+#' @description 
+#' Creates the data structures and files necessary to track
+#' the statistics through a data analysis
+#' 
+#' @usage 
+#'    [Object]$buildLog(numRows, objFunc, filePath = "./output")
+#' @param numRows
+#'    Number of rows of data expected in the log
+#' @param objFunc
+#'    The objective function with the statistics to be logged
+#' @param filePath
+#'    The file path where log files should be created
+#'    
+#' @return 
+#'    No meaningful return value
+#'    
+#' @seealso 
+#'    Method of the R6 class \code{\link{StatsLogger}}; 
+NULL
+
 # Class AdaptiveMCMCSampler (R6) ####
 
 #' An Adaptive Markov Chain Monte Carlo Sampler
@@ -170,7 +201,6 @@ StatsLogger <- R6::R6Class(
 #' log likelihoods.
 #' 
 #' @export
-#' @importFrom MASS mvrnorm
 #' @usage \code{AdaptiveMCMCSampler$new(...)}
 #' @param objFunc The objective function used to calculate the base
 #'    likelihood.  The sum of the log prior likelihoods are added to this
@@ -213,7 +243,7 @@ StatsLogger <- R6::R6Class(
 #'    accepted or not.
 #' @return The object of class \code{AdaptiveMCMCSampler} created
 #'    by the constructor
-AdaptiveMCMCSampler <- R6::R6Class(
+AdaptiveMCMCSampler <- R6Class(
    classname = "AdaptiveMCMCSampler",
    public = list(
       objFunc = NULL,

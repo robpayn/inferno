@@ -4,7 +4,8 @@ document("inftools");
 remove.packages("infmod");
 install.packages(pkgs = "./infmod", repos = NULL, type = "source");
 
-source(file = "./infmod/R/RandomVariable.R");
-source(file = "./infmod/R/ObjectiveFunction.R");
-source(file = "./infmod/R/Likelihood.R");
-source(file = "./infmod/R/MCMCSampler.R");
+loadpath <- "./infmod/R";
+source(file = paste(loadpath, "RandomVariable.R", sep = "/"));
+source(file = paste(loadpath, "ObjectiveFunction.R", sep = "/"));
+source(file = paste(loadpath, "Likelihood.R", sep = "/"));
+source(file = paste(loadpath, "MCMCSampler.R", sep = "/"));

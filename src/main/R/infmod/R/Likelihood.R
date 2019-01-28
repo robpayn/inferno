@@ -1,39 +1,53 @@
 # Package dependencies ####
 
-# All Likelihood objective function classes are R6 classes.
-library(R6);
+#' @importFrom R6 R6Class
+NULL
 
 # Class LogLikelihood (R6) ####
 
-#' @title Log likelihood objective function class
+#' @export
+#' 
+#' @title 
+#'    A log likelihood objective function class (R6 class generator)
 #' 
 #' @description
-#' Provides the tools for calculating a log likelihood
-#' value for the comparison of a model prediction and
-#' observations.
+#' The R6 class generator for a log likelihood objective function
+#' object used by optimization algorithms. 
+#' For example, an instance of this class would be the objective function 
+#' used for in Maximum Likelihood Estimate (MLE) analysis.
+#' Usage below is for the class constructor method.
 #' 
-#' @export
-#' @usage \code{LogLikelihood$new(...)}
+#' @usage 
+#'    LogLikelihood$new(..., sd, negate = FALSE, ignore.na = TRUE)
 #' @param ... 
-#'    Arguments passed to constructor \code{LogLikelihood$new(...)} will be 
-#'    passed generically to the constructor for the superclass \code{ObjectiveFunction}. 
+#'    Additional required arguments for the constructor 
+#'    of the superclass \code{ObjectiveFunction} must be provided. Optional
+#'    arguments are also available for various features. 
 #'    See documentation for the class \code{\link{ObjectiveFunction}} for a description
-#'    of these arguments.
+#'    of the additional required and optional arguments.
 #' @param sd 
 #'    A vector of standard deviations to be used for calculating the 
-#'    likelihood. There should be the same number of standard deviations as
-#'    the number of columns in the dataframes of predictons and observations
-#'    to be compared by the objective function.
+#'    likelihood. This vector shoud have the an element with a standard deviation 
+#'    corresponding to each of the columns in the dataframes containing the 
+#'    predictons and observations that are compared by the objective function.
 #' @param negate 
-#'    A boolean switch indicating if objective function value
+#'    A boolean switch indicating if the objective function value
 #'    should be negated for switching between maximization or minimization
-#'    algorithms
+#'    algorithms. Note that this is a log likelihood, so negation is 
+#'    equivalent to inverting the probability representing the raw likelihood.
+#'    Default value if FALSE (log likelihood is not negated).
 #' @param ignore.na
 #'    Determines if NA elements will be ignored in objective function value calculation.
-#'    Default is TRUE (ignore NAs in calculation)
+#'    Default is TRUE (ignore NAs in calculation).
+#'    
 #' @return The object of class \code{LogLikelihood} created
 #'    by the constructor
-LogLikelihood <- R6::R6Class(
+#'    
+#' @seealso 
+#'    Extends the R6 class \code{\link{ObjectiveFunction}}
+#'    
+#'    Methods: \code{\link{LogLikelihood_compare}}
+LogLikelihood <- R6Class(
    classname = "LogLikelihood",
    inherit = ObjectiveFunction,
    public = list(
@@ -83,28 +97,44 @@ LogLikelihood <- R6::R6Class(
    )
 );
 
-#' @title Compare the prediction and observation
+# Roxygen Method LogLikelihood_compare ####
+
+#' @name 
+#'    LogLikelihood_compare
+#' @title 
+#'    Compare the prediction and observation with a log likelihood
 #' 
 #' @description 
 #' Compares a list of prediction vectors to an associated list of
 #' observation vectors based on a formal log likelihood function
-#' based on a normal distribution of error.
+#' and assumption of a normal distribution of residual error.
 #' 
 #' Note that handling of NA values depend on the "ignore.na" attribute
 #' that is configurable in the constructor. By default NAs are ignored.
 #' 
-#' @name LogLikelihood_compare
+#' @usage 
+#'    [Object]$compare(params)
 #' @param params
-#'    Any "NaN" values in the sd attribute will be replaced by parameters
-#'    from the end of the parameter vector. (This feature is critical
+#'    Any "NaN" values in the sd attribute will be replaced by parameters values
+#'    from the end of the parameter vector. This feature is critical
 #'    if these standard deviations are being inferred as part of an
-#'    inferential modeling algorithm).
-#' @return The log likelihood (will be negated if negate attribute is TRUE)
+#'    inferential modeling algorithm, rather than being provided as an
+#'    attribute of the object.
+#'    
+#' @return The log likelihood value from the comparison
+#'    (will be negated if negate attribute of the object is TRUE)
+#'    
+#' @seealso 
+#'    Method of the R6 class \code{\link{LogLikelihood}};
+#'    Implements the abstract method \code{\link{ObjectiveFunction_compare}}
 NULL
 
 # Class BayesLogLikelihood (R6) ####
 
-#' @title Bayes posterior likelihood objective function class
+#' @export
+#' 
+#' @title 
+#'    Bayes posterior likelihood objective function class
 #' 
 #' @description 
 #' Provides the tools for calculating a Bayes posterior 
@@ -113,9 +143,16 @@ NULL
 #' the summed log likelihood from prior distributions of
 #' parameters to the log likelihood of a provided objective 
 #' function.
+#' Usage below is for the class constructor method.
 #' 
-#' @export
-#' @usage \code{BayesLogLikelihood$new(...)}
+#' @usage 
+#'    BayesLogLikelihood$new(..., paramDists, baseObjFunc, negate = FALSE)
+#' @param ... 
+#'    Additional required arguments for the constructor 
+#'    of the superclass \code{ObjectiveFunction} must be provided. Optional
+#'    arguments are also available for various features. 
+#'    See documentation for the class \code{\link{ObjectiveFunction}} for a description
+#'    of the additional required and optional arguments.
 #' @param paramDists A list of random variables representing the prior
 #'    prior probabilites for the parameters being estimated
 #' @param baseObjFunc The objective function that will calculate the 
@@ -125,9 +162,17 @@ NULL
 #' @param negate Optional switch to negate the objective function value
 #'    to adjust for algorthims that minimize or maximize objective funciton
 #'    values
+#'    
 #' @return The object of class \code{BayesLogLikelihood} created
 #'    by the constructor
-BayesLogLikelihood <- R6::R6Class(
+#'    
+#' @seealso 
+#'    Extends the R6 class \code{\link{ObjectiveFunction}}
+#'    
+#'    Methods: \code{\link{BayesLogLikelihood_compare}}; 
+#'       \code{\link{BayesLogLikelihood_propose}};
+#'       \code{\link{BayesLogLikelihood_realize}}
+BayesLogLikelihood <- R6Class(
    classname = "BayesLogLikelihood",
    inherit = ObjectiveFunction,
    public = list(
@@ -198,7 +243,12 @@ BayesLogLikelihood <- R6::R6Class(
    )
 );
 
-#' @title Propose a model 
+# Roxygen Method BayesLogLikelihood_propose ####
+
+#' @name 
+#'    BayesLogLikelihood_propose
+#' @title 
+#'    Propose a model 
 #' 
 #' @description 
 #' Overrides the superclass propose method to call the base objective 
@@ -208,13 +258,24 @@ BayesLogLikelihood <- R6::R6Class(
 #' Proposes a model with a given permutation represented by a subset of
 #' input
 #' 
-#' @name ObjectiveFunction_propose
+#' @usage 
+#'    [Object]$propose(params)
 #' @param params 
 #'    The subset of input being proposed as a permutation
+#'    
 #' @return The value of the objective function 
+#' 
+#' @seealso 
+#'    Method of the R6 class \code{\link{BayesLogLikelihood}};
+#'    Overrides the method \code{\link{ObjectiveFunction_propose}}
 NULL
 
-#' @title Realize a synthetic observation
+# Roxygen Method BayesLogLikelihood_realize ####
+
+#' @name 
+#'    BayesLogLikelihood_realize
+#' @title 
+#'    Realize a synthetic observation
 #' 
 #' @description 
 #' Overrides the superclass realize method to be sure realize is called
@@ -225,11 +286,23 @@ NULL
 #' error processor provided. Will cause an error if a synthetic error processor
 #' was not provided in construction of the object.
 #' 
-#' @name BayesLogLikelihood_realize
-#' @return The synthetic observation created
+#' @usage 
+#'    [Object]$realize()
+#'    
+#' @return 
+#'    The synthetic observation created
+#'    
+#' @seealso 
+#'    Method of the R6 class \code{\link{BayesLogLikelihood}}; 
+#'    Overrides the method \code{\link{ObjectiveFunction_realize}}
 NULL
 
-#' @title Compare the prediction and observation
+# Roxygen Method BayesLogLikelihood_compare ####
+
+#' @name 
+#'    BayesLogLikelihood_compare
+#' @title 
+#'    Compare the prediction and observation
 #' 
 #' @description 
 #' Compares a list of prediction vectors to an associated list of
@@ -244,30 +317,52 @@ NULL
 #' Note that handling of NA values depend on the "ignore.na" attribute
 #' that is configurable in the constructor. By default NAs are ignored.
 #' 
-#' @name BayesLogLikelihood_compare
+#' @usage 
+#'    [Object]$compare(params)
 #' @param params
 #'    Any "NaN" values in the sd attribute will be replaced by parameters
 #'    from the end of the parameter vector. (This feature is critical
 #'    if these standard deviations are being inferred as part of an
 #'    inferential modeling algorithm).
-#' @return The log likelihood (will be negated if negate attribute is TRUE)
+#'    
+#' @return 
+#'    The log likelihood (will be negated if negate attribute is TRUE)
+#'    
+#' @seealso 
+#'    Method of the R6 class \code{\link{BayesLogLikelihood}}; 
+#'    Implements the abstract method \code{\link{ObjectiveFunction_compare}}
 NULL
 
 # Class StatsLoggerBayes (R6) ####
 
-#' Markov Chain Bayesian stats logging tool
-#' 
-#' Extends \code{StatsLogger} to include stats specific to a Bayesian likelihood
-#' 
 #' @export
-#' @usage \code{StatsLoggerBayes$new(...)} (constructor)
+#' 
+#' @title 
+#'    Markov Chain Bayesian stats logging tool
+#' 
+#' @description 
+#' Extends \code{StatsLogger} to include stats specific to a Bayesian likelihood.
+#' Usage below is for the class constructor method.
+#' 
+#' @usage 
+#'    StatsLoggerBayes$new(filePath = NULL, statsFile = "stats.csv")
 #' @param filePath
 #'    Optional argument to set the path to which output files are written
 #' @param statsFile
 #'    Name of the file with logged stats data
-#' @return The object of class \code{StatsLogger} created
+#'    
+#' @return 
+#'    The object of class \code{StatsLoggerBayes} created
 #'    by the constructor
-StatsLoggerBayes <- R6::R6Class(
+#'    
+#' @seealso 
+#'    Extends the R6 class \code{\link{StatsLogger}}
+#'    
+#'    Methods: \code{\link{StatsLoggerBayes_buildLog}}; 
+#'       \code{StatsLoggerBayes_logAccepted};
+#'       \code{StatsLoggerBayes_logProposed};
+#'       \code{StatsLoggerBayes_logRejected};
+StatsLoggerBayes <- R6Class(
    classname = "StatsLoggerBayes",
    inherit = StatsLogger,
    public = list(
@@ -301,3 +396,31 @@ StatsLoggerBayes <- R6::R6Class(
       }
    )
 );
+
+# Roxygen Method StatsLoggerBayes_buildLog ####
+
+#' @name 
+#'    StatsLoggerBayes_buildLog
+#' @title 
+#'    Build the logger data structures and files
+#' 
+#' @description 
+#' Overrides the superclass buildLog method to add the structures needed
+#' for tracking Bayesian specific statistics
+#' 
+#' @usage 
+#'    [Object]$buildLog(numRows, objFunc, filePath = "./output")
+#' @param numRows
+#'    Number of rows of data expected in the log
+#' @param objFunc
+#'    The objective function with the statistics to be logged
+#' @param filePath
+#'    The file path where log files should be created
+#'    
+#' @return 
+#'    No meaningful return value
+#'    
+#' @seealso 
+#'    Method of the R6 class \code{\link{StatsLoggerBayes}}; 
+#'    Overrides the method \code{\link{StatsLogger_buildLog}}
+NULL

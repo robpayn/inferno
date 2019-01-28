@@ -1,24 +1,30 @@
 # Package dependencies ####
 
-# All ObjectiveFunction classes and composite classes
-# are R6 classes.
-library(R6);
+#' @importFrom R6 R6Class
+NULL
 
 # Class Model (R6) ####
 
-#' @title Abstract model class
+#' @export
+#' 
+#' @title 
+#'    Abstract model class
 #' 
 #' @description
-#' A class representing a model used to make a prediction
+#' An abstract class representing a model used to make a prediction
 #' that is compared to an observation for calculation of an
 #' objective function.
 #' 
-#' This class is abstract and is not intended to be instantiated
-#' directly. 
+#' @usage
+#'    Model$new()
 #' 
-#' @usage Abstract
-#' @export
-Model <- R6::R6Class(
+#' @return
+#'    This class is abstract and is not intended to be instantiated
+#'    directly.
+#'    
+#' @seealso 
+#'    Methods: \code{\link{Model_run}}
+Model <- R6Class(
    classname = "Model",
    public = list(
       run = function() 
@@ -28,7 +34,12 @@ Model <- R6::R6Class(
    )
 );
 
-#' @title Run the model (abstract) 
+# Roxygen Method Model_run ####
+
+#' @name 
+#'    Model_run
+#' @title 
+#'    Run the model (abstract) 
 #' 
 #' @description 
 #' A class that inherits from Model must implement a "run" method that will
@@ -37,8 +48,11 @@ Model <- R6::R6Class(
 #' This method declaration will cause a program to fail if 
 #' the method is called and the implementing class does not override it.
 #' 
-#' @name Model_run
-#' @return No required return value 
+#' @return 
+#'    No required return value 
+#'    
+#' @seealso 
+#'    Method of the R6 class \code{\link{Model}}; 
 NULL
 
 # Class ParameterProcessor ####
@@ -58,7 +72,7 @@ NULL
 #' 
 #' @usage Abstract
 #' @export
-ParameterProcessor <- R6::R6Class(
+ParameterProcessor <- R6Class(
    classname = "ParameterProcessor",
    public = list(
       model = NULL,
@@ -105,7 +119,7 @@ NULL
 #' 
 #' @usage Abstract
 #' @export
-PredictionProcessor <- R6::R6Class(
+PredictionProcessor <- R6Class(
    classname = "PredictionProcessor",
    public = list(
       model = NULL,
@@ -149,7 +163,7 @@ NULL
 #' 
 #' @usage Abstract
 #' @export
-SynthErrorProcessor <- R6::R6Class(
+SynthErrorProcessor <- R6Class(
    classname = "SynthErrorProcessor",
    public = list(
       objFunc = NULL,
@@ -183,7 +197,7 @@ NULL
 #' distributed error.
 #' 
 #' @export
-SynthErrorNormal <- R6::R6Class(
+SynthErrorNormal <- R6Class(
    classname = "SynthErrorNormal",
    inherit = SynthErrorProcessor,
    public = list(
@@ -229,29 +243,43 @@ NULL
 
 # Class ObjectiveFunction (R6) ####
 
-#' Abstract objective function class
+#' @export
 #' 
-#' A class representing an objective function for calculating a 
-#' value that represents to what degree a model prediction matches
-#' an observation.
+#' @title 
+#'    Abstract objective function class (R6 class generator)
+#' 
+#' @description 
+#' The R6 class generator for objects representing an objective function 
+#' used to calculate a value that represents agreement between model 
+#' predictions and observations. This abstract class defines the interface
+#' that is generally used by optimizations algorithms designed find the
+#' parameter values that predict the best fit of a model to measured data.
+#' See documentation of the method \code{\link{ObjectiveFunction_propose}}
+#' as the primary method of interface from optimization algorithms.
 #' This class is abstract and is not intended to be instantiated
 #' directly. The constructor is only intended to be called by
 #' an extending subclass.
+#' Usage below is for the class constructor method.
 #' 
-#' @export
-#' @usage \code{ObjectiveFunction$new(...)}
-#' @param model The model used to generate the predictions to be
+#' @usage 
+#'    ObjectiveFunction$new(model, parameterProcessor, predictionProcessor, 
+#'    synthErrorProcessor = NULL, observation = NULL)
+#' @param model 
+#'    The model used to generate the predictions to be
 #'    compared to the observations by the objective function
-#' @param parameterProcessor A parameter processor object that is capable
+#' @param parameterProcessor 
+#'    A parameter processor object that is capable
 #'    of translating a simple vector of parameter values and inserting them
 #'    into the appropriate attributes of the model object, such that
 #'    the following execution of the model will generation a prediction
 #'    corresponding to those parameter values.
-#' @param predictionProcessor A prediction processor object that is capable
+#' @param predictionProcessor 
+#'    A prediction processor object that is capable
 #'    of extracting a set of simple vectors from the model output, which can
 #'    then be compared to the observations in calculation of the objective
 #'    function value.
-#' @param synthErrorProcessor An optional synthetic error processor object 
+#' @param synthErrorProcessor 
+#'    An optional synthetic error processor object 
 #'    that can generate a synthetic observation based on some known structure
 #'    in error. By default this is null.  By setting to a valid object, this
 #'    will create a synthetic prediction from the current model configuration,
@@ -259,13 +287,24 @@ NULL
 #'    objective function object. This feature and the "realize" method for
 #'    generating a new realization of synthetic error is designed to 
 #'    facilitatin Monte Carlo error propagation algorithms.
-#' @param observation The observations to compare to the predictions
+#' @param observation 
+#'    The observations to compare to the predictions
 #'    by the objective function. Not that any observations provided as an
 #'    argument will be overwritten if a valid synthetic error processor is
 #'    provided. This argument defaults to a null value, so it is optional
 #'    if a synthetic error processor is provided. The object cannot be constructed
 #'    if the synthErrorProcessor and observation arguments are both NULL.
-ObjectiveFunction <- R6::R6Class(
+#'    
+#' @return 
+#'    The object of class \code{ObjectiveFunction} 
+#'    instantiated by the constructor
+#'    
+#' @seealso 
+#'    Methods: 
+#'    \code{\link{ObjectiveFunction_compare}};
+#'    \code{\link{ObjectiveFunction_propose}};
+#'    \code{\link{ObjectiveFunction_realize}};
+ObjectiveFunction <- R6Class(
    classname = "ObjectiveFunction",
    public = list(
       params = NULL,
@@ -340,30 +379,57 @@ ObjectiveFunction <- R6::R6Class(
    )
 );
 
-#' @title Propose a model 
+# Roxygen Method ObjectiveFunction_propose ####
+
+#' @name 
+#'    ObjectiveFunction_propose
+#' @title 
+#'    Propose a model 
 #' 
 #' @description 
 #' Proposes a model with a given permutation represented by a subset of
 #' input
 #' 
-#' @name ObjectiveFunction_propose
+#' @usage 
+#'    [Object]$propose(params)
 #' @param params 
 #'    The subset of input being proposed as a permutation
-#' @return The value of the objective function 
+#'    
+#' @return 
+#'    The value of the objective function 
+#'    
+#' @seealso 
+#'    Method of the R6 class \code{\link{ObjectiveFunction}}; 
 NULL
 
-#' @title Realize a synthetic observation
+# Roxygen Method ObjectiveFunction_realize ####
+
+#' @name 
+#'    ObjectiveFunction_realize
+#' @title 
+#'    Realize a synthetic observation
 #' 
 #' @description 
 #' Generates a new realization of the observation based on the synthetic
 #' error processor provided. Will cause an error if a synthetic error processor
 #' was not provided in construction of the object.
 #' 
-#' @name ObjectiveFunction_realize
-#' @return The synthetic observation created
+#' @usage 
+#'    [Object]$realize()
+#'    
+#' @return 
+#'    The synthetic observation created
+#'    
+#' @seealso 
+#'    Method of the R6 class \code{\link{ObjectiveFunction}}; 
 NULL
 
-#' @title Compare the prediction and observation (abstract) 
+# Roxygen Method ObjectiveFunction_compare ####
+
+#' @name 
+#'    ObjectiveFunction_compare
+#' @title 
+#'    Compare the prediction and observation (abstract) 
 #' 
 #' @description 
 #' A class that inherits from ObjectiveFunction must implement a 
@@ -372,9 +438,15 @@ NULL
 #' This method declaration will cause a program to fail if 
 #' the method is called and the implementing class does not override it.
 #' 
-#' @name ObjectiveFunction_compare
+#' @usage 
+#'    [Object]$compare(params)
 #' @param params
 #'    The object representing model parameters in the event that 
 #'    parameters are necessary for the comparison logic
-#' @return The value calculated from the comparison 
+#'    
+#' @return 
+#'    The value calculated from the comparison 
+#'    
+#' @seealso 
+#'    Method of the R6 class \code{\link{ObjectiveFunction}}; 
 NULL
