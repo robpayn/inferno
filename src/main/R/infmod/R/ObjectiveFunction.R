@@ -323,59 +323,90 @@ ObjectiveFunction <- R6Class(
          predictionProcessor,
          synthErrorProcessor = NULL,
          observation = NULL
-      ) 
-      {
-         self$model <- model;
-         self$parameterProcessor <- parameterProcessor;
-         if(is.null(self$parameterProcessor$model)) {
-            self$parameterProcessor$model <- self$model;
-         }
-         self$predictionProcessor <- predictionProcessor;
-         if(is.null(self$predictionProcessor$model)) {
-            self$predictionProcessor$model <- self$model;
-         }
-         
-         self$synthErrorProcessor <- synthErrorProcessor;
-         if (!is.null(self$synthErrorProcessor)) {
-            self$synthErrorProcessor$objFunc <- self;
+         ) 
+         {
+            self$model <- model;
+            self$parameterProcessor <- parameterProcessor;
+            if(is.null(self$parameterProcessor$model)) {
+               self$parameterProcessor$model <- self$model;
+            }
+            self$predictionProcessor <- predictionProcessor;
+            if(is.null(self$predictionProcessor$model)) {
+               self$predictionProcessor$model <- self$model;
+            }
+            
+            self$synthErrorProcessor <- synthErrorProcessor;
+            if (!is.null(self$synthErrorProcessor)) {
+               self$synthErrorProcessor$objFunc <- self;
+               self$model$run();
+               self$prediction <- self$predictionProcessor$process();
+               self$synthPrediction <- self$prediction;
+               self$realize();
+            } else {
+               if (is.null(observation)) {
+                  stop(paste("Synthetic error processor and",
+                             "observation arguments cannot both be NULL."));
+               }
+               self$observation <- observation;
+            }
+         },
+      propose = function(params)
+         {
+            self$params <- params;
+            self$parameterProcessor$process(params = params);
             self$model$run();
             self$prediction <- self$predictionProcessor$process();
-            self$synthPrediction <- self$prediction;
-            self$realize();
-         } else {
-            if (is.null(observation)) {
-               stop(paste("Synthetic error processor and",
-                          "observation arguments cannot both be NULL."));
+            if(is.null(self$prediction)) {
+               self$multivariateValues <- rep(
+                  x = NA, 
+                  times = length(self$observation)
+               );
+               self$value <- NA;   
+            } else {
+               self$multivariateValues <- self$compare(params);
+               self$value <- sum(self$multivariateValues);
             }
-            self$observation <- observation;
-         }
-      },
-      propose = function(params)
-      {
-         self$params <- params;
-         self$parameterProcessor$process(params = params);
-         self$model$run();
-         self$prediction <- self$predictionProcessor$process();
-         if(is.null(self$prediction)) {
-            self$multivariateValues <- rep(
-               x = NA, 
-               times = length(self$observation)
-            );
-            self$value <- NA;   
-         } else {
-            self$multivariateValues <- self$compare(params);
-            self$value <- sum(self$multivariateValues);
-         }
-         return(self$value);
-      },
-      realize = function()
-      {
-         self$observation <- self$synthErrorProcessor$process();
-      },
+            return(self$value);
+         },
+         realize = function()
+         {
+            self$observation <- self$synthErrorProcessor$process();
+         },
+      plotFit = function(
+         params, 
+         x = numeric(), 
+         ylabs = as.list(names(self$observation)),
+         lineArgs = list(), 
+         ...)
+         {
+            self$propose(params);
+            par(mfrow = c(length(self$observation) ,1));
+            for(count in 1:length(self$observation)) {
+               if (length(x) == 0) {
+                  x = self$observation[[count]];
+                  y = NULL;
+                  lineArgs$x <- self$prediction[[count]];
+               } else {
+                  y = self$observation[[count]];
+                  lineArgs$x <- x;
+                  lineArgs$y <- self$prediction[[count]];
+               }
+               plot(
+                  x = x,
+                  y = y,
+                  ylab = ylabs[[count]],
+                  ...
+               );
+               do.call(
+                  what = lines,
+                  args = lineArgs
+               );
+            }
+         },
       compare = function(params) 
-      {
-         stop("Abstract function 'compare' has not been implemented.");
-      }
+         {
+            stop("Abstract function 'compare' has not been implemented.");
+         }
    )
 );
 

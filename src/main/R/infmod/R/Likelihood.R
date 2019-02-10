@@ -206,6 +206,7 @@ BayesLogLikelihood <- R6Class(
          # operation of the base objective function calculations
          self$params <- params;
          self$baseObjFunc$propose(params);
+         self$prediction <- self$baseObjFunc$prediction;
          if(is.na(self$baseObjFunc$value)) {
             self$value <- self$baseObjFunc$value;
          } else {

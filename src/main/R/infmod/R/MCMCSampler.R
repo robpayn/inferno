@@ -531,23 +531,10 @@ AdaptiveMCMCSampler <- R6Class(
       },
       plotHighestPosterior = function(...)
       {
-         numVars <- length(self$objFunc$observation);
-         self$objFunc$propose(self$paramSamples[self$maxProbIndex,]);
-         par(
-            mfrow = c(numVars, 1), 
-            mar = c(4, 5, 2, 1)
+         self$objFunc$plotFit(
+            params = self$paramSamples[self$maxProbIndex,],
+            ...
          );
-         for(varIndex in 1:numVars) {
-            plot(
-               self$objFunc$observation[[varIndex]],
-               ylab = names(self$objFunc$observation)[varIndex]
-            );
-            lines(
-               self$objFunc$baseObjFunc$prediction[[varIndex]],
-               col = "red",
-               lty = "dashed"
-            );
-         }
       },
       plotSummary = function(
          device = "pdf", 
