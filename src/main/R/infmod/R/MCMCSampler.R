@@ -1,7 +1,6 @@
 # Package dependencies ####
 
 #' @importFrom R6 R6Class
-#' @importFrom MASS mvrnorm
 NULL
 
 # Class Criterion (R6) ####
@@ -83,54 +82,78 @@ StatsLogger <- R6Class(
       stats = NULL,
       statsFile = NULL,
       filePath = NULL,
+      isLoggingFailedPredictions = NULL,
       initialize = function(
          filePath = NULL, 
-         statsFile = "stats.csv"
-      )
-      {
-         self$filePath <- filePath;
-         if(is.null(self$filePath)) {
-            self$statsFile <- statsFile;
-         } else {
-            self$statsFile <- paste(
-               self$filePath,
-               statsFile,
-               sep = "/"
-            );
-         }
-      },
-      buildLog = function(numRows, objFunc, filePath = "./output")
-      {
-         self$numRows <- numRows;
-         self$objFunc <- objFunc;
-         self$stats <- data.frame(
-            objective = numeric(length = self$numRows),
-            propObjective = numeric(length = self$numRows),
-            wasAccepted = logical(length = self$numRows)
-         );
-         if(is.null(self$filePath)) {
+         statsFile = "stats.csv",
+         isLoggingFailedPredictions = FALSE
+         )
+         {
             self$filePath <- filePath;
-            self$statsFile <- paste(
-               self$filePath,
-               self$statsFile,
-               sep = "/"
+            self$isLoggingFailedPredictions <- 
+               isLoggingFailedPredictions;
+            if(is.null(self$filePath)) {
+               self$statsFile <- statsFile;
+            } else {
+               self$statsFile <- paste(
+                  self$filePath,
+                  statsFile,
+                  sep = "/"
+               );
+            }
+         },
+      buildLog = function(numRows, objFunc, filePath = "./output")
+         {
+            self$numRows <- numRows;
+            self$objFunc <- objFunc;
+            self$stats <- data.frame(
+               objective = numeric(length = self$numRows),
+               propObjective = numeric(length = self$numRows),
+               wasAccepted = logical(length = self$numRows)
             );
-         }
-      },
+            if (self$isLoggingFailedPredictions) {
+               self$stats <- cbind(
+                  self$stats, 
+                  data.frame(failedPred = logical(length = self$numRows))
+               );
+            }
+            if(is.null(self$filePath)) {
+               self$filePath <- filePath;
+               self$statsFile <- paste(
+                  self$filePath,
+                  self$statsFile,
+                  sep = "/"
+               );
+            }
+         },
       logProposed = function(index)
-      {
-         self$stats[index, 2] <- self$objFunc$value;
-      },
+         {
+            self$stats[index, 2] <- self$objFunc$value;
+         },
       logAccepted = function(index)
-      {
-         self$stats[index, 1] <- self$objFunc$value;
-         self$stats[index, 3] <- TRUE;
-      },
+         {
+            self$stats[index, 1] <- self$objFunc$value;
+            self$stats[index, 3] <- TRUE;
+            if (self$isLoggingFailedPredictions) {
+               self$logFailedPredictions(index);
+            }
+         },
       logRejected = function(index)
-      {
-         self$stats[index, 1] <- self$stats[index - 1, 1];
-         self$stats[index, 3] <- FALSE;
-      },
+         {
+            self$stats[index, 1] <- self$stats[index - 1, 1];
+            self$stats[index, 3] <- FALSE;
+            if (self$isLoggingFailedPredictions) {
+               self$logFailedPredictions(index);
+            }
+         },
+      logFailedPredictions = function(index)
+         {
+            if (is.null(self$objFunc$prediction)) {
+               self$stats[index, 4] <- TRUE;   
+            } else {
+               self$stats[index, 4] <- FALSE;
+            }
+         },
       writeFirstRow = function()
       {
          dir.create(
@@ -258,7 +281,6 @@ AdaptiveMCMCSampler <- R6Class(
       totalStaticRealizations = NULL,
       adaptiveRealizations = NULL,
       totalRealizations = NULL,
-      adaptiveCovarianceFactor = NULL,
       paramSamples = NULL,
       paramSamplesFile = NULL,
       paramProposals = NULL,
@@ -266,22 +288,18 @@ AdaptiveMCMCSampler <- R6Class(
       statsLogger = NULL,
       filesPath = NULL,
       writeFiles = NULL,
-      burninCovariance = NULL,
-      staticCovariance = NULL,
-      tinyIdentFactor = NULL,
-      adaptiveCovariance = NULL,
+      burninProposalDist = NULL,
+      staticProposalDist = NULL,
       criterion = NULL,
       initialize = function(
          objFunc, 
          initialParams, 
-         burninCovariance,
+         burninProposalDist,
          burninRealizations,
-         staticCovariance = burninCovariance,
+         staticProposalDist = burninProposalDist,
          staticRealizations,
          adaptiveRealizations,
          criterion = CriterionMetropLogLikelihood$new(),
-         adaptiveCovarianceFactor = 1,
-         tinyIdentFactor = 1e-20,
          writeFiles = TRUE,
          filesPath = "./output",
          paramProposalsFile = "paramProposals.csv",
@@ -293,13 +311,11 @@ AdaptiveMCMCSampler <- R6Class(
          self$objFunc <- objFunc;   
          self$criterion <- criterion;
          self$initialParams <- initialParams;
-         self$burninCovariance <- burninCovariance;
+         self$burninProposalDist <- burninProposalDist;
          self$burninRealizations <- burninRealizations;
-         self$staticCovariance <- staticCovariance;
+         self$staticProposalDist <- staticProposalDist;
          self$staticRealizations <- staticRealizations;
          self$adaptiveRealizations <- adaptiveRealizations;
-         self$adaptiveCovarianceFactor <- adaptiveCovarianceFactor;
-         self$tinyIdentFactor <- tinyIdentFactor;
          self$filesPath <- filesPath;
          self$paramProposalsFile <- paste(
             filesPath,
@@ -388,37 +404,29 @@ AdaptiveMCMCSampler <- R6Class(
          # Create a tiny identity matrix to avoid zeros in 
          # diagonal of covariance matrix
          tinyIdent = 
-            diag(self$numParams) * 
-            self$tinyIdentFactor * 
-            self$adaptiveCovarianceFactor;
+            
          
          # Start the static convariance burnin phase
          loop <- 2:self$burninRealizations;
+         proposalDist <- self$burninProposalDist;
          for(realizationCount in loop) {
             # Take a Markov Chain step in parameter space based on a
             # static covariance and propose the new parameter set
             self$paramProposals[realizationCount,] <- 
                self$paramSamples[realizationCount - 1,] +
-               mvrnorm(
-                  n = 1,
-                  mu = rep(0, self$numParams),
-                  Sigma = self$burninCovariance
-               );
+               proposalDist$randomSample();
             self$propose(realizationCount);
          }
          
          # Start the static covariance Metropolis phase
          loop <- (self$burninRealizations + 1):self$totalStaticRealizations;
+         proposalDist <- self$staticProposalDist;
          for(realizationCount in loop) {
             # Take a Markov Chain step in parameter space based on a
             # static covariance and propose the new parameter set
             self$paramProposals[realizationCount,] <- 
                self$paramSamples[realizationCount - 1,] +
-               mvrnorm(
-                  n = 1,
-                  mu = rep(0, self$numParams),
-                  Sigma = self$staticCovariance
-               );
+               proposalDist$randomSample();
             self$propose(realizationCount);
          }
          
@@ -429,20 +437,13 @@ AdaptiveMCMCSampler <- R6Class(
             # Adapt the covariance matrix based on the current parameter
             # ensemble
             covarianceIndices <- self$startCovarianceIndex:prevRealization;
-            self$adaptiveCovariance <- 
-               cov(self$paramSamples[covarianceIndices,]) *
-               self$adaptiveCovarianceFactor +
-               tinyIdent;
-            
+            proposalDist$normalizedFit(self$paramSamples[covarianceIndices,]);
+
             # Take a Markov Chain step in parameter space based on an
             # adapted covariance and propose the new parameter set 
             self$paramProposals[realizationCount,] <- 
                self$paramSamples[prevRealization,] +
-               mvrnorm(
-                  n = 1,
-                  mu = rep(0, self$numParams),
-                  Sigma = self$adaptiveCovariance
-               );
+               proposalDist$randomSample();
             self$propose(realizationCount);
          }
       },
