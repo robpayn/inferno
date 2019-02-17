@@ -383,17 +383,18 @@ ObjectiveFunction <- R6Class(
             par(mfrow = c(length(self$observation) ,1));
             for(count in 1:length(self$observation)) {
                if (length(x) == 0) {
-                  x = self$observation[[count]];
-                  y = NULL;
+                  xvar = self$observation[[count]];
+                  yvar = NULL;
                   lineArgs$x <- self$prediction[[count]];
                } else {
-                  y = self$observation[[count]];
+                  xvar = x;
+                  yvar = self$observation[[count]];
                   lineArgs$x <- x;
                   lineArgs$y <- self$prediction[[count]];
                }
                plot(
-                  x = x,
-                  y = y,
+                  x = xvar,
+                  y = yvar,
                   ylab = ylabs[[count]],
                   ...
                );

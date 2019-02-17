@@ -23,9 +23,9 @@ RandomVariable <- R6Class(
          {
             stop("Abstract function 'density' has not been implemented");   
          },
-      randomSample = function(n)
+      markovStep = function(vector)
          {
-            stop("Abstract function 'randomSample' has not been implemented");   
+            stop("Abstract function 'markovStep' has not been implemented");   
          },
       normalizedFit = function(x)
          {
@@ -51,19 +51,19 @@ RandomVariable <- R6Class(
 #'    The probability density of the value requested 
 NULL
 
-#' @name RandomVariable_randomSample
+#' @name RandomVariable_markovStep
 #' 
 #' @title 
-#'    Randomly samples the distribution 
+#'    Calculates a Markov Chain step 
 #' 
 #' @description 
-#'    Provides a random sample from the distribution. Repeated sampling
-#'    should converge on a population that exactly follows the distribution.
+#'    Provides a new location in multivariate space based on a previous
+#'    location provided as a vector of variable values
 #' 
-#' @param n 
-#'    Number of random samples requested
+#' @param vector 
+#'    Previous location in multivariate space
 #' @return 
-#'    Random samples from the distribution. 
+#'    Next location in multivariate space
 NULL
 
 #' @name RandomVariable_normalizedFit
@@ -256,23 +256,26 @@ RVMultivariateNormal <- R6Class(
                tinyIdentFactor * 
                adjustCovarianceFactor;
          },
-      randomSample = function(n = 1, ...) 
+      markovStep = function(vector, ...) 
          {
-            return(mvrnorm(
-               n = n,
-               mu = self$means,
-               Sigma = self$covariances,
-               ...
-            ));
+            return(
+               vector +
+               mvrnorm(
+                  n = 1,
+                  mu = self$means,
+                  Sigma = self$covariances,
+                  ...
+               )
+            );
          },
-      normalizedFit = function(obsMatrix, zeroMeans = TRUE, ...)
-      {
-         self$covariances <- 
-            cov(obsMatrix, ...) *
-            self$adjustCovarianceFactor +
-            self$tinyIdentMatrix;
-         return(self$covariances);
-      }
+      normalizedFit = function(obsMatrix, ...)
+         {
+            self$covariances <- 
+               cov(obsMatrix, ...) *
+               self$adjustCovarianceFactor +
+               self$tinyIdentMatrix;
+            return(self$covariances);
+         }
    )
 );
 
@@ -293,19 +296,19 @@ RVMultivariateNormal <- R6Class(
 #'    The probability density of the value requested 
 NULL
 
-#' @name RVMultivariateNormal_randomSample
+#' @name RandomVariable_markovStep
 #' 
 #' @title 
-#'    Randomly samples the distribution 
+#'    Calculates a Markov Chain step 
 #' 
 #' @description 
-#'    Provides a random sample from the distribution. Repeated sampling
-#'    should converge on a population that exactly follows the distribution.
+#'    Provides a new location in multivariate space based on a previous
+#'    location provided as a vector of variable values
 #' 
-#' @param n 
-#'    Number of random samples requested
+#' @param vector 
+#'    Previous location in multivariate space
 #' @return 
-#'    Random samples from the distribution. 
+#'    Next location in multivariate space
 NULL
 
 #' @name RVMultivariateNormal_normalizedFit

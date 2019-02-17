@@ -231,12 +231,15 @@ NULL
 #' @param initialParams A vector with initial values for the parameter 
 #'    being estimated
 #'    (initial location in parameter space for the Markov Chain)
-#' @param burninCovariance The covariance matrix used to stochastically 
-#'    constrain Markov Chain step sizes during the burnin phase
+#' @param burninProposalDist The random variable used to generate random
+#'    steps in the Markov Chain during the burnin phase. This should be 
+#'    an R6 class that extends the RandomVariable class, and implements 
+#'    the normalizedFit and markovStep methods.
 #' @param burninRealizations Number of realizations for the burnin phase
-#' @param staticCovariance The convariance matrix used to stochastically
-#'    constrain Markov Chain step sizes during the static Metropolis
-#'    phase. This argument will default to be the same as burninCovariance.
+#' @param staticProposalDist The random variable used to generate random
+#'    steps in the Markov Chain during the static phase. This should be 
+#'    an R6 class that extends the RandomVariable class, and implements 
+#'    the normalizedFit and markovStep methods.
 #' @param staticRealizations Number of realizations for the static 
 #'    Metropolis phase
 #' @param adaptiveRealizations Number of realizations for the phase
@@ -246,13 +249,6 @@ NULL
 #' @param criterion The critrerion object used for determining if a
 #'    propsed parameter set is accepted or rejected. By default, a 
 #'    criterion that assumes log likelihoods is used.
-#' @param adaptiveCovarianceFactor A scalar factormultiplied by the raw 
-#'    covariance matrix used for the Markov Chain proposal distribution.
-#'    This attribute can be used to adjust for the acceptance rate during the
-#'    adaptive phase. By default this is set to 1.
-#' @param tinyIdentFactor A matrix added the covariance
-#'    matrix to preven zero values in the diagonal.  
-#'    By default the value of this argument is 1e-20.
 #' @param writefiles A boolean switch used to determine if the output
 #'    of the analysis is written to files as the algorithm progresses.
 #' @param filesPath The path to which output files are written.
@@ -401,11 +397,6 @@ AdaptiveMCMCSampler <- R6Class(
             self$statsLogger$writeFirstRow();
          }
          
-         # Create a tiny identity matrix to avoid zeros in 
-         # diagonal of covariance matrix
-         tinyIdent = 
-            
-         
          # Start the static convariance burnin phase
          loop <- 2:self$burninRealizations;
          proposalDist <- self$burninProposalDist;
@@ -413,8 +404,7 @@ AdaptiveMCMCSampler <- R6Class(
             # Take a Markov Chain step in parameter space based on a
             # static covariance and propose the new parameter set
             self$paramProposals[realizationCount,] <- 
-               self$paramSamples[realizationCount - 1,] +
-               proposalDist$randomSample();
+               proposalDist$markovStep(self$paramSamples[realizationCount - 1,]);
             self$propose(realizationCount);
          }
          
@@ -425,8 +415,7 @@ AdaptiveMCMCSampler <- R6Class(
             # Take a Markov Chain step in parameter space based on a
             # static covariance and propose the new parameter set
             self$paramProposals[realizationCount,] <- 
-               self$paramSamples[realizationCount - 1,] +
-               proposalDist$randomSample();
+               proposalDist$markovStep(self$paramSamples[realizationCount - 1,]);
             self$propose(realizationCount);
          }
          
@@ -442,8 +431,7 @@ AdaptiveMCMCSampler <- R6Class(
             # Take a Markov Chain step in parameter space based on an
             # adapted covariance and propose the new parameter set 
             self$paramProposals[realizationCount,] <- 
-               self$paramSamples[prevRealization,] +
-               proposalDist$randomSample();
+               proposalDist$markovStep(self$paramSamples[realizationCount - 1,]);
             self$propose(realizationCount);
          }
       },
