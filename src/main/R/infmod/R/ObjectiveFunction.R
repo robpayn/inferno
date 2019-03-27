@@ -69,6 +69,7 @@ NULL
 #'   \code{\link{ObjectiveFunction_compare}};
 #'   \code{\link{ObjectiveFunction_propose}};
 #'   \code{\link{ObjectiveFunction_realize}};
+#'   
 ObjectiveFunction <- R6Class(
    classname = "ObjectiveFunction",
    public = list(
@@ -196,6 +197,7 @@ ObjectiveFunction <- R6Class(
 #'    
 #' @seealso 
 #'    Method of the R6 class \code{\link{ObjectiveFunction}}; 
+#'    
 NULL
 
 # Roxygen Method ObjectiveFunction_realize ####
@@ -218,6 +220,7 @@ NULL
 #'    
 #' @seealso 
 #'    Method of the R6 class \code{\link{ObjectiveFunction}}; 
+#'    
 NULL
 
 # Roxygen Method ObjectiveFunction_compare ####
@@ -289,6 +292,7 @@ ObservationGenerator <- R6Class(
 #' 
 #' @return 
 #'   An object representing the synthetic observation 
+#'   
 NULL
 
 # Class ObservationGeneratorNormalErr ####
@@ -347,5 +351,6 @@ ObservationGeneratorNormalErr <- R6Class(
 #' 
 #' @return 
 #'   An object representing the synthetic observations 
+#'   
 NULL
 
