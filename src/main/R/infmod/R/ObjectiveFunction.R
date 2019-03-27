@@ -8,22 +8,22 @@ NULL
 #' @export
 #' 
 #' @title 
-#'    Abstract model class
+#'   Abstract model class
 #' 
 #' @description
-#' An abstract class representing a model used to make a prediction
-#' that is compared to an observation for calculation of an
-#' objective function.
+#'   An abstract class representing a model used to make a prediction
+#'   that is compared to an observation for calculation of an
+#'   objective function.
 #' 
 #' @usage
-#'    Model$new()
+#'   Model$new()
 #' 
 #' @return
-#'    This class is abstract and is not intended to be instantiated
-#'    directly.
+#'   This class is abstract and is not intended to be instantiated
+#'   directly.
 #'    
 #' @seealso 
-#'    Methods: \code{\link{Model_run}}
+#'   Methods: \code{\link{Model_run}}
 Model <- R6Class(
    classname = "Model",
    public = list(
@@ -36,170 +36,191 @@ Model <- R6Class(
 
 # Roxygen Method Model_run ####
 
-#' @name 
-#'    Model_run
+#' @name Model_run
+#' 
 #' @title 
-#'    Run the model (abstract) 
+#'   Run the model (abstract) 
 #' 
 #' @description 
-#' A class that inherits from Model must implement a "run" method that will
-#' execute the model with its given configuration.
+#'   A class that inherits from Model must implement a "run" method that will
+#'   execute the model with its given configuration.
 #' 
-#' This method declaration will cause a program to fail if 
-#' the method is called and the implementing class does not override it.
+#'   This method declaration will cause a program to fail if 
+#'   the method is called and the implementing class does not override it.
 #' 
 #' @return 
-#'    No required return value 
+#'   No required return value 
 #'    
 #' @seealso 
-#'    Method of the R6 class \code{\link{Model}}; 
+#'   Method of the R6 class \code{\link{Model}}; 
 NULL
 
-# Class ParameterProcessor ####
+# Class ParameterTranslator ####
 
-#' @title Abstract parameter processor class
+#' @export
+#' 
+#' @title 
+#'   Abstract parameter processor class
 #' 
 #' @description 
-#' A parameter processor object knows how to configure a model for
-#' execution based on an object representing some portion of that
-#' model's inputs.  For example, as simple parameter processor may
-#' be used to configure a model from a simple vector of parameter values
-#' in an inferential modeling algorithm.
+#'   Configures a model for execution based translating model parameters from
+#'   an object.  For example, as simple parameter translator may
+#'   be used to configure a model from a simple vector of parameter values
+#'   provided by an inferential modeling algorithm.
 #' 
-#' This class is abstract and is not intended to be instantiated
-#' directly. Inheriting parameter processors are specific to a given 
-#' type of model input and the model that takes that input before execution.
+#'   This class is abstract and is not intended to be instantiated
+#'   directly. Inheriting parameter translator classes are specific to a given 
+#'   type of model input and the model that takes that input before execution.
 #' 
-#' @usage Abstract
-#' @export
-ParameterProcessor <- R6Class(
-   classname = "ParameterProcessor",
+#' @usage 
+#'   Abstract
+#'   
+ParameterTranslator <- R6Class(
+   classname = "ParameterTranslator",
    public = list(
       model = NULL,
-      initialize = function(model = NULL)
+      initialize = function(model)
       {
          self$model <- model;  
       },
-      process = function(params)
+      translate = function(params)
       {
-         stop("Abstract function 'ParameterProcessor.process' 
+         stop("Abstract function 'ParameterTranslator$translate' 
               has not been implemented");
       }
    )
 );
 
-#' @title Process the input (abstract) 
+#' @name ParameterTranslator_translate
+#' 
+#' @title 
+#'   Translate the parameters (abstract) 
 #' 
 #' @description 
-#' A class that inherits from ParameterProcessor must implement a 
-#' "process" method that will reconfigure the model input according
-#' to the provided object representing model parameters. 
+#'   A class that inherits from ParameterTranslator must implement a 
+#'   "translate" method that will reconfigure the model input according
+#'   to the provided object representing model parameters. 
 #' 
-#' This method declaration will cause a program to fail if 
-#' the method is called and the implementing class does not override it.
+#'   This method declaration will cause a program to fail if 
+#'   the method is called and the implementing class does not override it.
 #' 
-#' @name ParameterProcessor_process
-#' @return No required return value 
+#' @return 
+#'   No required return value 
 NULL
 
-# Class PredictionProcessor ####
+# Class PredictionExtractor ####
 
-#' @title Abstract prediction processor class
+#' @export
+#' 
+#' @title 
+#'   Extracts predictions from model output
 #' 
 #' @description 
-#' A prediction processor object knows how to extract a relatively
-#' simple subset of model ouptut used to compare the model results
-#' to other data. For example, a prediciton processor may
-#' be used to extract a simple vector of predicted values to compare
-#' to observed values in an inferential modeling algorithm.
+#'   Extracts a relatively simple subset of model ouptut used to compare 
+#'   the model prediction to other data. For example, a prediciton extractor may
+#'   be used to extract a simple vector of predicted values to compare
+#'   to observed values in an inferential modeling algorithm.
 #' 
-#' This class is abstract and is not intended to be instantiated
-#' directly. Inheriting parameter processors are specific to a given 
-#' type of model input and the model that takes that input before execution.
+#'   This class is abstract and is not intended to be instantiated
+#'   directly. Inheriting parameter extractors are specific to a given 
+#'   type of model input and the model that takes that input before execution.
 #' 
-#' @usage Abstract
-#' @export
-PredictionProcessor <- R6Class(
-   classname = "PredictionProcessor",
+#' @usage 
+#'   Abstract
+#'   
+PredictionExtractor <- R6Class(
+   classname = "PredictionExtractor",
    public = list(
       model = NULL,
-      initialize = function(model = NULL)
+      initialize = function(model)
       {
          self$model <- model;  
       },
-      process = function()
+      extract = function()
       {
-         stop("Abstract function 'PredictionProcessor.process' 
+         stop("Abstract function 'PredictionExtractor$extract' 
               has not been implemented");
       }
    )
 );
 
-#' @title Process the output (abstract) 
+#' @name 
+#'   PredictionExtractor_extract
+#' 
+#' @title 
+#'   Extract prediction from output (abstract) 
 #' 
 #' @description 
-#' A class that inherits from PredictionProcessor must implement a 
-#' "process" method that will extract the desired subset of model
-#' output. 
+#'   A class that inherits from PredictionExtractor must implement an 
+#'   "extract" method that will extract the desired subset of model
+#'   output. 
 #' 
-#' This method declaration will cause a program to fail if 
-#' the method is called and the implementing class does not override it.
+#'   This method declaration will cause a program to fail if 
+#'   the method is called and the implementing class does not override it.
 #' 
-#' @name PredictionProcessor_process
-#' @return An object representing the subset of model output 
+#' @return 
+#'   An object representing the subset of model output
+#'    
 NULL
 
-# Class SynthErrorProcessor ####
+# Class ObservationGenerator ####
 
-#' @title Abstract synthetic error processor class
+#' @export
+#' 
+#' @title 
+#'   Generates an observation from a known model
 #' 
 #' @description 
-#' A synthetic error processor can generate a synthetic set of errors
-#' based on a known structure of error.
+#'   Generates a synthetic observation data set base on a model.
 #' 
-#' This class is abstract and is not intended to be instantiated
-#' directly. Inheriting parameter processors are specific to a given 
-#' type of model input and the model that takes that input before execution.
+#'   This class is abstract and is not intended to be instantiated
+#'   directly. 
 #' 
-#' @usage Abstract
-#' @export
-SynthErrorProcessor <- R6Class(
-   classname = "SynthErrorProcessor",
+#' @usage 
+#'   Abstract
+#'   
+ObservationGenerator <- R6Class(
+   classname = "ObservationGenerator",
    public = list(
       objFunc = NULL,
-      process = function()
+      generate = function()
       {
-         stop("Abstract function 'SynthErrorProcessor.process' 
+         stop("Abstract function 'ObservationGenerator$generate' 
               has not been implemented");
       }
    )
 );
 
-#' @title Process the synthetic error (abstract) 
+#' @name ObservationGenerator_generate
+#'   
+#' @title 
+#'   Generate a synthetic observation (abstract) 
 #' 
 #' @description 
-#' A class that inherits from SynthErrorProcessor must implement a 
-#' "process" method that will create the synthetic observations. 
+#'   A class that inherits from ObservationGenerator must implement a 
+#'   "generate" method that will create the synthetic observations. 
 #' 
-#' This method declaration will cause a program to fail if 
-#' the method is called and the implementing class does not override it.
+#'   This method declaration will cause a program to fail if 
+#'   the method is called and the implementing class does not override it.
 #' 
-#' @name SynthErrorProcessor_process
-#' @return An object representing the synthetic error 
+#' @return 
+#'   An object representing the synthetic observation 
 NULL
 
-# Class SynthErrorNormal ####
+# Class ObservationGeneratorNormalErr ####
 
-#' @title Processor for synthetic normally distributed error
+#' @export
+#' 
+#' @title 
+#'   Generates observations with normal error
 #' 
 #' @description 
-#' A synthetic error processor for normally independent normally
-#' distributed error.
+#'   A observation generator for independent and normally
+#'   distributed error.
 #' 
-#' @export
-SynthErrorNormal <- R6Class(
-   classname = "SynthErrorNormal",
-   inherit = SynthErrorProcessor,
+ObservationGeneratorNormalErr <- R6Class(
+   classname = "ObservationGeneratorNormalErr",
+   inherit = ObservationGenerator,
    public = list(
       mean = NULL,
       sd = NULL,
@@ -208,7 +229,7 @@ SynthErrorNormal <- R6Class(
          self$mean <- mean;
          self$sd <- sd;
       },
-      process = function()
+      generate = function()
       {
          return(data.frame(mapply(
             FUN = function(pred, mean, sd) 
@@ -230,15 +251,18 @@ SynthErrorNormal <- R6Class(
    )
 );
 
-#' @title Process normally distribute synthetic error
+#' @name ObservationGeneratorNormalErr_generate
+#' 
+#' @title 
+#'   Generate an observation with normally distribute synthetic error
 #' 
 #' @description  
-#' Generates synthetic observations for an objective function
-#' based on the current prediction and independent, normally-distributed
-#' error.
+#'   Generates synthetic observations for an objective function
+#'   based on the current prediction and independent, normally-distributed
+#'   error.
 #' 
-#' @name SynthErrorProcessor_process
-#' @return An object representing the synthetic observations 
+#' @return 
+#'   An object representing the synthetic observations 
 NULL
 
 # Class ObjectiveFunction (R6) ####
@@ -246,106 +270,108 @@ NULL
 #' @export
 #' 
 #' @title 
-#'    Abstract objective function class (R6 class generator)
+#'   Abstract objective function class (R6 class generator)
 #' 
 #' @description 
-#' The R6 class generator for objects representing an objective function 
-#' used to calculate a value that represents agreement between model 
-#' predictions and observations. This abstract class defines the interface
-#' that is generally used by optimizations algorithms designed find the
-#' parameter values that predict the best fit of a model to measured data.
-#' See documentation of the method \code{\link{ObjectiveFunction_propose}}
-#' as the primary method of interface from optimization algorithms.
-#' This class is abstract and is not intended to be instantiated
-#' directly. The constructor is only intended to be called by
-#' an extending subclass.
-#' Usage below is for the class constructor method.
+#'   The R6 class generator for objects representing an objective function 
+#'   used to calculate a value that represents agreement between model 
+#'   predictions and observations. This abstract class defines the interface
+#'   that is generally used by optimizations algorithms designed find the
+#'   parameter values that predict the best fit of a model to measured data.
+#'   See documentation of the method \code{\link{ObjectiveFunction_propose}}
+#'   as the primary method of interface from optimization algorithms.
+#'   This class is abstract and is not intended to be instantiated
+#'   directly. The constructor is only intended to be called by
+#'   an extending subclass.
+#'   Usage below is for the class constructor method.
 #' 
 #' @usage 
-#'    ObjectiveFunction$new(model, parameterProcessor, predictionProcessor, 
-#'    synthErrorProcessor = NULL, observation = NULL)
+#'   ObjectiveFunction$new(model, parameterTranslator, predictionExtractor, 
+#'   synthErrorProcessor = NULL, observation = NULL)
 #' @param model 
-#'    The model used to generate the predictions to be
-#'    compared to the observations by the objective function
-#' @param parameterProcessor 
-#'    A parameter processor object that is capable
-#'    of translating a simple vector of parameter values and inserting them
-#'    into the appropriate attributes of the model object, such that
-#'    the following execution of the model will generation a prediction
-#'    corresponding to those parameter values.
-#' @param predictionProcessor 
-#'    A prediction processor object that is capable
-#'    of extracting a set of simple vectors from the model output, which can
-#'    then be compared to the observations in calculation of the objective
-#'    function value.
+#'   The model used to generate the predictions to be
+#'   compared to the observations by the objective function
+#' @param parameterTranslator 
+#'   A parameter translator object that is capable
+#'   of translating a simple vector of parameter values and inserting them
+#'   into the appropriate attributes of the model object, such that
+#'   the following execution of the model will generation a prediction
+#'   corresponding to those parameter values.
+#' @param predictionExtractor 
+#'   A prediction extractor object that is capable
+#'   of extracting a set of simple vectors from the model output, which can
+#'   then be compared to the observations in calculation of the objective
+#'   function value.
 #' @param synthErrorProcessor 
-#'    An optional synthetic error processor object 
-#'    that can generate a synthetic observation based on some known structure
-#'    in error. By default this is null.  By setting to a valid object, this
-#'    will create a synthetic prediction from the current model configuration,
-#'    and then create a synthetic observation upon construction of the
-#'    objective function object. This feature and the "realize" method for
-#'    generating a new realization of synthetic error is designed to 
-#'    facilitatin Monte Carlo error propagation algorithms.
+#'   An optional synthetic error processor object 
+#'   that can generate a synthetic observation based on some known structure
+#'   in error. By default this is null.  By setting to a valid object, this
+#'   will create a synthetic prediction from the current model configuration,
+#'   and then create a synthetic observation upon construction of the
+#'   objective function object. This feature and the "realize" method for
+#'   generating a new realization of synthetic error is designed to 
+#'   facilitatin Monte Carlo error propagation algorithms.
 #' @param observation 
-#'    The observations to compare to the predictions
-#'    by the objective function. Not that any observations provided as an
-#'    argument will be overwritten if a valid synthetic error processor is
-#'    provided. This argument defaults to a null value, so it is optional
-#'    if a synthetic error processor is provided. The object cannot be constructed
-#'    if the synthErrorProcessor and observation arguments are both NULL.
+#'   The observations to compare to the predictions
+#'   by the objective function. Observations should be a data frame with
+#'   the same number of rows and columns as the prediction.
+#'    
+#'   Note that any observations provided as an
+#'   argument will be overwritten if a valid synthetic error processor is
+#'   provided. This argument defaults to a null value, so it is optional
+#'   if a synthetic error processor is provided. The object cannot be constructed
+#'   if the synthErrorProcessor and observation arguments are both NULL.
 #'    
 #' @return 
-#'    The object of class \code{ObjectiveFunction} 
-#'    instantiated by the constructor
+#'   The object of class \code{ObjectiveFunction} 
+#'   instantiated by the constructor
 #'    
 #' @seealso 
-#'    Methods: 
-#'    \code{\link{ObjectiveFunction_compare}};
-#'    \code{\link{ObjectiveFunction_propose}};
-#'    \code{\link{ObjectiveFunction_realize}};
+#'   Methods: 
+#'   \code{\link{ObjectiveFunction_compare}};
+#'   \code{\link{ObjectiveFunction_propose}};
+#'   \code{\link{ObjectiveFunction_realize}};
 ObjectiveFunction <- R6Class(
    classname = "ObjectiveFunction",
    public = list(
       params = NULL,
-      parameterProcessor = NULL,
+      parameterTranslator = NULL,
       model = NULL,
       prediction = NULL,
-      predictionProcessor = NULL,
+      predictionExtractor = NULL,
       synthPrediction = NULL,
       observation = NULL,
-      synthErrorProcessor = NULL,
+      observationGenerator = NULL,
       multivariateValues = NULL,
       value = NULL,
       initialize = function(
          model,
-         parameterProcessor,
-         predictionProcessor,
-         synthErrorProcessor = NULL,
+         parameterTranslator,
+         predictionExtractor,
+         observationGenerator = NULL,
          observation = NULL
          ) 
          {
             self$model <- model;
-            self$parameterProcessor <- parameterProcessor;
-            if(is.null(self$parameterProcessor$model)) {
-               self$parameterProcessor$model <- self$model;
-            }
-            self$predictionProcessor <- predictionProcessor;
-            if(is.null(self$predictionProcessor$model)) {
-               self$predictionProcessor$model <- self$model;
-            }
-            
-            self$synthErrorProcessor <- synthErrorProcessor;
-            if (!is.null(self$synthErrorProcessor)) {
-               self$synthErrorProcessor$objFunc <- self;
+            self$parameterTranslator <- parameterTranslator;
+            self$predictionExtractor <- predictionExtractor;
+            self$observationGenerator <- observationGenerator;
+            if (!is.null(self$observationGenerator)) {
+               if (!is.null(observation)) {
+                  stop(paste("Observation generator and ",
+                             "observation arguments cannot both be ", 
+                             "non-NULL vaulues."));
+               }
+               self$observationGenerator$objFunc <- self;
                self$model$run();
-               self$prediction <- self$predictionProcessor$process();
+               self$prediction <- self$predictionExtractor$extract();
                self$synthPrediction <- self$prediction;
                self$realize();
             } else {
                if (is.null(observation)) {
-                  stop(paste("Synthetic error processor and",
-                             "observation arguments cannot both be NULL."));
+                  stop(paste("Observation generator and ",
+                             "observation arguments cannot both be ", 
+                             "NULL vaulues."));
                }
                self$observation <- observation;
             }
@@ -353,9 +379,9 @@ ObjectiveFunction <- R6Class(
       propose = function(params)
          {
             self$params <- params;
-            self$parameterProcessor$process(params = params);
+            self$parameterTranslator$translate(params = params);
             self$model$run();
-            self$prediction <- self$predictionProcessor$process();
+            self$prediction <- self$predictionExtractor$extract();
             if(is.null(self$prediction)) {
                self$multivariateValues <- rep(
                   x = NA, 
@@ -368,9 +394,9 @@ ObjectiveFunction <- R6Class(
             }
             return(self$value);
          },
-         realize = function()
+      realize = function()
          {
-            self$observation <- self$synthErrorProcessor$process();
+            self$observation <- self$observationGenerator$generate();
          },
       plotFit = function(
          params, 
@@ -419,8 +445,8 @@ ObjectiveFunction <- R6Class(
 #'    Propose a model 
 #' 
 #' @description 
-#' Proposes a model with a given permutation represented by a subset of
-#' input
+#'    Proposes a model with a given permutation represented by a subset of
+#'    input
 #' 
 #' @usage 
 #'    [Object]$propose(params)
@@ -442,9 +468,9 @@ NULL
 #'    Realize a synthetic observation
 #' 
 #' @description 
-#' Generates a new realization of the observation based on the synthetic
-#' error processor provided. Will cause an error if a synthetic error processor
-#' was not provided in construction of the object.
+#'    Generates a new realization of the observation based on the observation generator
+#'    provided. Will cause an error if called and an observation generator attribute
+#'    is NULL.
 #' 
 #' @usage 
 #'    [Object]$realize()
@@ -464,11 +490,11 @@ NULL
 #'    Compare the prediction and observation (abstract) 
 #' 
 #' @description 
-#' A class that inherits from ObjectiveFunction must implement a 
-#' "compare" method that will compare a prediciton to an observation. 
+#'    A class that inherits from ObjectiveFunction must implement a 
+#'    "compare" method that will compare a prediciton to an observation. 
 #' 
-#' This method declaration will cause a program to fail if 
-#' the method is called and the implementing class does not override it.
+#'    This method declaration will cause a program to fail if 
+#'    the method is called and the implementing class does not override it.
 #' 
 #' @usage 
 #'    [Object]$compare(params)

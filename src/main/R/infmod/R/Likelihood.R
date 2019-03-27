@@ -186,10 +186,10 @@ BayesLogLikelihood <- R6Class(
          negate = FALSE
       ) 
       {
-         # Parameter and prediction processors are not 
+         # Parameter translator and prediction extractor are not 
          # necessary
-         self$parameterProcessor <- NULL;
-         self$predictionProcessor <- NULL;
+         self$parameterTranslator <- NULL;
+         self$predictionExtractor <- NULL;
          
          # Set the values of attributes based on
          # arguments to the constructor
@@ -279,14 +279,10 @@ NULL
 #'    Realize a synthetic observation
 #' 
 #' @description 
-#' Overrides the superclass realize method to be sure realize is called
-#' for the base objective function and the observation attribute is set
-#' appropriately.
-#' 
-#' Generates a new realization of the observation based on the synthetic
-#' error processor provided. Will cause an error if a synthetic error processor
-#' was not provided in construction of the object.
-#' 
+#'   Overrides the superclass realize method to be sure realize is called
+#'   for the base objective function and the observation attribute is set
+#'   appropriately.
+#'   
 #' @usage 
 #'    [Object]$realize()
 #'    

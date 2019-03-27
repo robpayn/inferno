@@ -5,18 +5,21 @@ NULL
 
 # Class Criterion (R6) ####
 
-#' @title Abstract selection criterion class
+#' @export
+#' 
+#' @title 
+#'    Abstract selection criterion class
 #' 
 #' @description 
-#' A selection criterion object can determine if a given proposal is
-#' accepted given the probability of the proposal and a reference probability
+#'    A selection criterion object can determine if a given proposal is
+#'    accepted given the probability of the proposal and a reference probability
 #' 
-#' This class is abstract and is not intended to be instantiated
-#' directly. Inheriting parameter processors are specific to a given 
-#' type of model input and the model that takes that input before execution.
+#'    This class is abstract and is not intended to be instantiated
+#'    directly. Inheriting parameter processors are specific to a given 
+#'    type of model input and the model that takes that input before execution.
 #' 
 #' @usage Abstract
-#' @export
+#' 
 Criterion <- R6Class(
    classname = "Criterion",
    public = list(
@@ -29,14 +32,18 @@ Criterion <- R6Class(
 
 # Class CriterionMetropLogLikelihood (R6) ####
 
-#' @title Metropolis election criterion class
+#' @export
+#' 
+#' @title 
+#'    Metropolis election criterion class
 #' 
 #' @description 
-#' Uses the Metropolis algorithm to determine if the proposed
-#' probability is accepted.
+#'    Uses the Metropolis algorithm to determine if the proposed
+#'    probability is accepted.
 #' 
-#' @usage \code{StatsLogger$new(...)} (constructor)
-#' @export
+#' @usage 
+#'    StatsLogger$new(...)
+#'    
 CriterionMetropLogLikelihood <- R6Class(
    classname = "CriterionMetropLogLikelihood",
    inherit = Criterion,
@@ -61,9 +68,9 @@ CriterionMetropLogLikelihood <- R6Class(
 #'    Markov Chain stats logging tool
 #' 
 #' @description
-#' Logs the stats from a Markov Chain accpet/reject algorithm. Stats
-#' are logged both to a matrix in memory and written to files, if configured
-#' to do so.
+#'    Logs the stats from a Markov Chain accpet/reject algorithm. Stats
+#'    are logged both to a matrix in memory and written to files, if configured
+#'    to do so.
 #' 
 #' @usage 
 #'    StatsLogger$new(...)
@@ -188,14 +195,14 @@ StatsLogger <- R6Class(
 
 # Roxygen Method StatsLogger_buildLog ####
 
-#' @name 
-#'    StatsLogger_buildLog
+#' @name StatsLogger_buildLog
+#' 
 #' @title 
 #'    Build the logger data structures and files
 #' 
 #' @description 
-#' Creates the data structures and files necessary to track
-#' the statistics through a data analysis
+#'    Creates the data structures and files necessary to track
+#'    the statistics through a data analysis
 #' 
 #' @usage 
 #'    [Object]$buildLog(numRows, objFunc, filePath = "./output")
@@ -215,52 +222,69 @@ NULL
 
 # Class AdaptiveMCMCSampler (R6) ####
 
-#' An Adaptive Markov Chain Monte Carlo Sampler
-#' 
-#' Provides the tools for executing an optimization using a
-#' Markov Chain sampler with an adaptive covariance matrix to determine
-#' the step size. the algorithm for accepting or rejecting a sample is
-#' configurable, but by default is the Metropolis criterion for
-#' log likelihoods.
-#' 
 #' @export
-#' @usage \code{AdaptiveMCMCSampler$new(...)}
-#' @param objFunc The objective function used to calculate the base
+#' 
+#' @title
+#'    An Adaptive Markov Chain Monte Carlo Sampler
+#' 
+#' @description 
+#'    Provides the tools for executing an optimization using a
+#'    Markov Chain sampler with an adaptive covariance matrix to determine
+#'    the step size. the algorithm for accepting or rejecting a sample is
+#'    configurable, but by default is the Metropolis criterion for
+#'    log likelihoods.
+#' 
+#' @usage 
+#'    AdaptiveMCMCSampler$new(...)
+#' @param objFunc 
+#'    The objective function used to calculate the base
 #'    likelihood.  The sum of the log prior likelihoods are added to this
 #'    to generate the overall value of the objective function
-#' @param initialParams A vector with initial values for the parameter 
+#' @param initialParams 
+#'    A vector with initial values for the parameter 
 #'    being estimated
 #'    (initial location in parameter space for the Markov Chain)
-#' @param burninProposalDist The random variable used to generate random
+#' @param burninProposalDist 
+#'    The random variable used to generate random
 #'    steps in the Markov Chain during the burnin phase. This should be 
 #'    an R6 class that extends the RandomVariable class, and implements 
 #'    the normalizedFit and markovStep methods.
-#' @param burninRealizations Number of realizations for the burnin phase
-#' @param staticProposalDist The random variable used to generate random
+#' @param burninRealizations 
+#'    Number of realizations for the burnin phase
+#' @param staticProposalDist 
+#'    The random variable used to generate random
 #'    steps in the Markov Chain during the static phase. This should be 
 #'    an R6 class that extends the RandomVariable class, and implements 
 #'    the normalizedFit and markovStep methods.
-#' @param staticRealizations Number of realizations for the static 
+#' @param staticRealizations 
+#'    Number of realizations for the static 
 #'    Metropolis phase
-#' @param adaptiveRealizations Number of realizations for the phase
+#' @param adaptiveRealizations 
+#'    Number of realizations for the phase
 #'    where the covariance used to constrain Markov Chain step size is
 #'    adapted according to the covariance of previous accepted parameter
 #'    sets in the ensemble.
-#' @param criterion The critrerion object used for determining if a
+#' @param criterion 
+#'    The critrerion object used for determining if a
 #'    propsed parameter set is accepted or rejected. By default, a 
 #'    criterion that assumes log likelihoods is used.
-#' @param writefiles A boolean switch used to determine if the output
+#' @param writefiles 
+#'    A boolean switch used to determine if the output
 #'    of the analysis is written to files as the algorithm progresses.
-#' @param filesPath The path to which output files are written.
+#' @param filesPath 
+#'    The path to which output files are written.
 #'    By default, this path is "./output"
-#' @param paramProposalsFile The file name for the proposed paramater
+#' @param paramProposalsFile 
+#'    The file name for the proposed paramater
 #'    output.  By default, "paramProposals.csv"
-#' @param statsLogger The stats logger object to use for writing statistics
+#' @param statsLogger 
+#'    The stats logger object to use for writing statistics
 #'    to output. By default, an object of the \code{StatsLogger} class is
 #'    created and used.  This logs the accepted probability, the proposed
 #'    probability, and a boolean value indicating if the iteration was
 #'    accepted or not.
-#' @return The object of class \code{AdaptiveMCMCSampler} created
+#' @return 
+#'    The object of class \code{AdaptiveMCMCSampler} created
 #'    by the constructor
 AdaptiveMCMCSampler <- R6Class(
    classname = "AdaptiveMCMCSampler",
