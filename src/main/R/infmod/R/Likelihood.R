@@ -380,21 +380,19 @@ StatsLoggerBayes <- R6Class(
          self$likelihoodColumn <- length(self$stats) - 1;
          self$propLikelihoodColumn <- length(self$stats) ;
       },
-      logProposed = function(index)
-      {
-         super$logProposed(index);
-         self$stats[index, self$propLikelihoodColumn] <- 
-            self$objFunc$baseObjFunc$value;
-      },
       logAccepted = function(index)
       {
          super$logAccepted(index);
+         self$stats[index, self$propLikelihoodColumn] <- 
+            self$objFunc$baseObjFunc$value;
          self$stats[index, self$likelihoodColumn] <- 
             self$objFunc$baseObjFunc$value;
       },
       logRejected = function(index)
       {
          super$logRejected(index);
+         self$stats[index, self$propLikelihoodColumn] <- 
+            self$objFunc$baseObjFunc$value;
          self$stats[index, self$likelihoodColumn] <- 
             self$stats[index - 1, self$likelihoodColumn];
       }

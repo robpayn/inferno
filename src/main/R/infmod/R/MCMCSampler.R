@@ -54,14 +54,14 @@ NULL
 #' @param writefiles 
 #'    A boolean switch used to determine if the output
 #'    of the analysis is written to files as the algorithm progresses.
-#' @param filesPath 
+#' @param outputPath 
 #'    The path to which output files are written.
 #'    By default, this path is "./output"
 #' @param paramProposalsFile 
 #'    The file name for the proposed paramater
 #'    output.  By default, "paramProposals.csv"
-#' @param statsLogger 
-#'    The stats logger object to use for writing statistics
+#' @param statsLoggers 
+#'    A list of stats logger objects to use for writing statistics
 #'    to output. By default, an object of the \code{StatsLogger} class is
 #'    created and used.  This logs the accepted probability, the proposed
 #'    probability, and a boolean value indicating if the iteration was
@@ -88,8 +88,8 @@ AdaptiveMCMCSampler <- R6Class(
       paramSamplesFile = NULL,
       paramProposals = NULL,
       paramProposalsFile = NULL,
-      statsLogger = NULL,
-      filesPath = NULL,
+      statsLoggers = NULL,
+      outputPath = NULL,
       writeFiles = NULL,
       burninProposalDist = NULL,
       staticProposalDist = NULL,
@@ -104,10 +104,10 @@ AdaptiveMCMCSampler <- R6Class(
          adaptiveRealizations,
          criterion = CriterionMetropLogLikelihood$new(),
          writeFiles = TRUE,
-         filesPath = "./output",
+         outputPath = "./output",
          paramProposalsFile = "paramProposals.csv",
          paramSamplesFile = "paramSamples.csv",
-         statsLogger = StatsLogger$new()
+         statsLoggers = list(basic = StatsLogger$new())
       )
       {
          # Assign attributes according to arguments
@@ -119,14 +119,14 @@ AdaptiveMCMCSampler <- R6Class(
          self$staticProposalDist <- staticProposalDist;
          self$staticRealizations <- staticRealizations;
          self$adaptiveRealizations <- adaptiveRealizations;
-         self$filesPath <- filesPath;
+         self$outputPath <- outputPath;
          self$paramProposalsFile <- paste(
-            filesPath,
+            outputPath,
             paramProposalsFile,
             sep = "/"
          );
          self$paramSamplesFile <- paste(
-            filesPath,
+            outputPath,
             paramSamplesFile,
             sep = "/"
          );
@@ -159,11 +159,16 @@ AdaptiveMCMCSampler <- R6Class(
          self$paramProposals[1,] <- initialParams;
          
          # Configure the statistics logger object
-         self$statsLogger <- statsLogger;
-         self$statsLogger$buildLog(
-            self$totalRealizations, 
-            objFunc,
-            self$filesPath
+         self$statsLoggers <- statsLoggers;
+         lapply(
+            X = self$statsLoggers,
+            FUN = function(statsLogger, ...) 
+               {
+                  statsLogger$buildLog(...);
+               },
+            numRows = self$totalRealizations,
+            objFunc = self$objFunc,
+            filePath = self$outputPath
          );
          
          # Create the first row of samples and proposals from the
@@ -171,15 +176,20 @@ AdaptiveMCMCSampler <- R6Class(
          self$prevProb <- self$objFunc$propose(self$initialParams);
          self$maxProb <- self$prevProb;
          self$maxProbIndex <- 1;
-         self$statsLogger$logProposed(1);
-         self$statsLogger$logAccepted(1);
+         lapply(
+            X = self$statsLoggers,
+            FUN = function(statsLogger) 
+            {
+               statsLogger$logAccepted(1);
+            }
+         );
       },
       optimize = function()
       {
          # Set up the output files and write the first line
          if (self$writeFiles) {
             dir.create(
-               path = self$filesPath, 
+               path = self$outputPath, 
                showWarnings = FALSE,
                recursive = TRUE
             );
@@ -201,7 +211,13 @@ AdaptiveMCMCSampler <- R6Class(
                row.names = FALSE,
                quote = TRUE
             );
-            self$statsLogger$writeFirstRow();
+            lapply(
+               X = self$statsLoggers,
+               FUN = function(statsLogger) 
+               {
+                  statsLogger$writeFirstRow();
+               }
+            );
          }
          
          # Start the static convariance burnin phase
@@ -250,8 +266,7 @@ AdaptiveMCMCSampler <- R6Class(
             self$objFunc$propose(self$paramProposals[index,]),
             self$prevProb
          );
-         self$statsLogger$logProposed(index);
-         
+
          # Record results of current realization depending on whether
          # proposed parameter set is accepted or rejected relative to
          # previous Markov Chain step
@@ -263,11 +278,23 @@ AdaptiveMCMCSampler <- R6Class(
                self$maxProb = self$prevProb;
                self$maxProbIndex = index;
             }
-            self$statsLogger$logAccepted(index);
+            lapply(
+               X = self$statsLoggers,
+               FUN = function(statsLogger) 
+                  {
+                     statsLogger$logAccepted(index);
+                  }
+            );
          } else {
             # Reject the proposed parameters
             self$paramSamples[index,] <- self$paramSamples[prevIndex,];
-            self$statsLogger$logRejected(index);
+            lapply(
+               X = self$statsLoggers,
+               FUN = function(statsLogger) 
+                  {
+                     statsLogger$logRejected(index);
+                  }
+            );
          }
          
          # Write results to output files
@@ -286,7 +313,13 @@ AdaptiveMCMCSampler <- R6Class(
                sep = ",",
                append = TRUE
             );
-            self$statsLogger$writeRow(index);
+            lapply(
+               X = self$statsLoggers,
+               FUN = function(statsLogger) 
+                  {
+                     statsLogger$writeRow(index);
+                  }
+            );
          }
          
       },
@@ -477,6 +510,7 @@ StatsLogger <- R6Class(
             self$filePath <- filePath;
             self$isLoggingFailedPredictions <- 
                isLoggingFailedPredictions;
+            
             if(is.null(self$filePath)) {
                self$statsFile <- statsFile;
             } else {
@@ -511,13 +545,10 @@ StatsLogger <- R6Class(
                );
             }
          },
-      logProposed = function(index)
-         {
-            self$stats[index, 2] <- self$objFunc$value;
-         },
       logAccepted = function(index)
          {
             self$stats[index, 1] <- self$objFunc$value;
+            self$stats[index, 2] <- self$objFunc$value;
             self$stats[index, 3] <- TRUE;
             if (self$isLoggingFailedPredictions) {
                self$logFailedPredictions(index);
@@ -526,6 +557,7 @@ StatsLogger <- R6Class(
       logRejected = function(index)
          {
             self$stats[index, 1] <- self$stats[index - 1, 1];
+            self$stats[index, 2] <- self$objFunc$value;
             self$stats[index, 3] <- FALSE;
             if (self$isLoggingFailedPredictions) {
                self$logFailedPredictions(index);
