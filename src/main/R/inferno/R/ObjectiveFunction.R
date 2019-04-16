@@ -24,8 +24,7 @@ NULL
 #'   Usage below is for the class constructor method.
 #' 
 #' @usage 
-#'   ObjectiveFunction$new(model, parameterTranslator, predictionExtractor, 
-#'   synthErrorProcessor = NULL, observation = NULL)
+#'   ObjectiveFunction$new(<arguments>)
 #' @param model 
 #'   The model used to generate the predictions to be
 #'   compared to the observations by the objective function
@@ -66,10 +65,18 @@ NULL
 #'    
 #' @seealso 
 #'   Methods: 
-#'   \code{\link{ObjectiveFunction_compare}};
-#'   \code{\link{ObjectiveFunction_propose}};
-#'   \code{\link{ObjectiveFunction_realize}};
 #'   
+#' @section Methods:
+#'   \code{$new}\cr
+#'   \code{$compare} - 
+#'     See \code{\link{ObjectiveFunction_compare}}\cr
+#'   \code{$propose} - 
+#'     See \code{\link{ObjectiveFunction_propose}}\cr
+#'   \code{$realize} - 
+#'     See \code{\link{ObjectiveFunction_realize}}\cr
+#'   \code{$plotFit} - 
+#'     See \code{\link{ObjectiveFunction_plotFit}}\cr
+#'
 ObjectiveFunction <- R6Class(
    classname = "ObjectiveFunction",
    public = list(
@@ -83,12 +90,13 @@ ObjectiveFunction <- R6Class(
       observationGenerator = NULL,
       multivariateValues = NULL,
       value = NULL,
-      initialize = function(
-         model,
-         parameterTranslator,
-         predictionExtractor,
-         observationGenerator = NULL,
-         observation = NULL
+      initialize = function
+         (
+            model,
+            parameterTranslator,
+            predictionExtractor,
+            observationGenerator = NULL,
+            observation = NULL
          ) 
          {
             self$model <- model;
@@ -114,72 +122,14 @@ ObjectiveFunction <- R6Class(
                }
                self$observation <- observation;
             }
-         },
-      propose = function(params)
-         {
-            self$params <- params;
-            self$parameterTranslator$translate(params = params);
-            self$model$run();
-            self$prediction <- self$predictionExtractor$extract();
-            if(is.null(self$prediction)) {
-               self$multivariateValues <- rep(
-                  x = NA, 
-                  times = length(self$observation)
-               );
-               self$value <- NA;   
-            } else {
-               self$multivariateValues <- self$compare(params);
-               self$value <- sum(self$multivariateValues);
-            }
-            return(self$value);
-         },
-      realize = function()
-         {
-            self$observation <- self$observationGenerator$generate();
-         },
-      plotFit = function(
-         params, 
-         x = numeric(), 
-         ylabs = as.list(names(self$observation)),
-         lineArgs = list(), 
-         ...)
-         {
-            self$propose(params);
-            par(mfrow = c(length(self$observation) ,1));
-            for(count in 1:length(self$observation)) {
-               if (length(x) == 0) {
-                  xvar = self$observation[[count]];
-                  yvar = NULL;
-                  lineArgs$x <- self$prediction[[count]];
-               } else {
-                  xvar = x;
-                  yvar = self$observation[[count]];
-                  lineArgs$x <- x;
-                  lineArgs$y <- self$prediction[[count]];
-               }
-               plot(
-                  x = xvar,
-                  y = yvar,
-                  ylab = ylabs[[count]],
-                  ...
-               );
-               do.call(
-                  what = lines,
-                  args = lineArgs
-               );
-            }
-         },
-      compare = function(params) 
-         {
-            stop("Abstract function 'compare' has not been implemented.");
          }
    )
 );
 
-# Roxygen Method ObjectiveFunction_propose ####
+# Method ObjectiveFunction$propose ####
 
-#' @name 
-#'    ObjectiveFunction_propose
+#' @name ObjectiveFunction_propose
+#' 
 #' @title 
 #'    Propose a model 
 #' 
@@ -195,15 +145,36 @@ ObjectiveFunction <- R6Class(
 #' @return 
 #'    The value of the objective function 
 #'    
-#' @seealso 
-#'    Method of the R6 class \code{\link{ObjectiveFunction}}; 
-#'    
-NULL
+#' @section Method of class:
+#'   \code{\link{ObjectiveFunction}}
+#'   
+ObjectiveFunction$set(
+   which = "public",
+   name = "propose",
+   value = function(params)
+      {
+         self$params <- params;
+         self$parameterTranslator$translate(params = params);
+         self$model$run();
+         self$prediction <- self$predictionExtractor$extract();
+         if(is.null(self$prediction)) {
+            self$multivariateValues <- rep(
+               x = NA, 
+               times = length(self$observation)
+            );
+            self$value <- NA;   
+         } else {
+            self$multivariateValues <- self$compare(params);
+            self$value <- sum(self$multivariateValues);
+         }
+         return(self$value);
+      }
+);
 
-# Roxygen Method ObjectiveFunction_realize ####
+# Method ObjectiveFunction$realize ####
 
-#' @name 
-#'    ObjectiveFunction_realize
+#' @name ObjectiveFunction_realize
+#' 
 #' @title 
 #'    Realize a synthetic observation
 #' 
@@ -218,15 +189,22 @@ NULL
 #' @return 
 #'    The synthetic observation created
 #'    
-#' @seealso 
-#'    Method of the R6 class \code{\link{ObjectiveFunction}}; 
-#'    
-NULL
+#' @section Method of class:
+#'   \code{\link{ObjectiveFunction}}
+#'   
+ObjectiveFunction$set(
+   which = "public",
+   name = "realize",
+   value = function()
+      {
+         self$observation <- self$observationGenerator$generate();
+      }
+);
 
-# Roxygen Method ObjectiveFunction_compare ####
+# Method ObjectiveFunction$compare ####
 
-#' @name 
-#'    ObjectiveFunction_compare
+#' @name ObjectiveFunction_compare
+#' 
 #' @title 
 #'    Compare the prediction and observation (abstract) 
 #' 
@@ -246,111 +224,89 @@ NULL
 #' @return 
 #'    The value calculated from the comparison 
 #'    
-#' @seealso 
-#'    Method of the R6 class \code{\link{ObjectiveFunction}}; 
-NULL
+#' @section Method of class:
+#'   \code{\link{ObjectiveFunction}}
+#'   
+ObjectiveFunction$set(
+   which = "public",
+   name = "compare",
+   value = function(params) 
+      {
+         stop("Abstract function 'compare' has not been implemented.");
+      }
+);
 
-# Class ObservationGenerator ####
+# Method ObjectiveFunction$plotFit ####
 
-#' @export
+#' @name ObjectiveFunction_plotFit
 #' 
 #' @title 
-#'   Generates an observation from a known model
+#'   Plot the fit of a prediction
 #' 
 #' @description 
-#'   Generates a synthetic observation data set base on a model.
-#' 
-#'   This class is abstract and is not intended to be instantiated
-#'   directly. 
-#' 
+#'   Plots the prediction based on the provided parameters 
+#'   on the same axes as the observations
+#'   
 #' @usage 
-#'   Abstract
+#'   [Object]$plotFit(<arguments>)
+#' @param params
+#'   Parameters for generating the prediction
+#' @param x
+#'   Optional vector of x-axis values for the plot.
+#'   Defaults to plotting x-axis as vector index.
+#' @param ylabs
+#'   Optional list of labels for y-axes on plots.
+#'   Defaults to names of list elements in the observations.
+#' @param lineArgs
+#'   List of arguments passed to the function creating
+#'   the lines for the predictions.
+#'   Defaults to no additional arguments 
+#'   (defaults for \code{lines()} function)
+#' @param ...
+#'   Additional arguments are passed to the \code{plot()} function
+#'   that generates the axes and plots the observations
 #'   
-ObservationGenerator <- R6Class(
-   classname = "ObservationGenerator",
-   public = list(
-      objFunc = NULL,
-      generate = function()
-      {
-         stop("Abstract function 'ObservationGenerator$generate' 
-              has not been implemented");
-      }
-   )
-);
-
-#' @name ObservationGenerator_generate
-#'   
-#' @title 
-#'   Generate a synthetic observation (abstract) 
-#' 
-#' @description 
-#'   A class that inherits from ObservationGenerator must implement a 
-#'   "generate" method that will create the synthetic observations. 
-#' 
-#'   This method declaration will cause a program to fail if 
-#'   the method is called and the implementing class does not override it.
-#' 
 #' @return 
-#'   An object representing the synthetic observation 
+#'   No meaningful return value
 #'   
-NULL
-
-# Class ObservationGeneratorNormalErr ####
-
-#' @export
-#' 
-#' @title 
-#'   Generates observations with normal error
-#' 
-#' @description 
-#'   A observation generator for independent and normally
-#'   distributed error.
-#' 
-ObservationGeneratorNormalErr <- R6Class(
-   classname = "ObservationGeneratorNormalErr",
-   inherit = ObservationGenerator,
-   public = list(
-      mean = NULL,
-      sd = NULL,
-      initialize = function(mean, sd)
+#' @section Method of class:
+#'   \code{\link{ObjectiveFunction}}
+#'   
+ObjectiveFunction$set(
+   which = "public",
+   name = "plotFit",
+   value = function
+      (
+         params, 
+         x = numeric(), 
+         ylabs = as.list(names(self$observation)),
+         lineArgs = list(), 
+         ...
+      )
       {
-         self$mean <- mean;
-         self$sd <- sd;
-      },
-      generate = function()
-      {
-         return(data.frame(mapply(
-            FUN = function(pred, mean, sd) 
-            {
-               return(
-                  pred + rnorm(
-                     n = nrow(self$objFunc$synthPrediction), 
-                     mean = mean, 
-                     sd = sd
-                  )
-               );
-            }, 
-            pred = self$objFunc$synthPrediction,
-            mean = self$mean,
-            sd = self$sd,
-            SIMPLIFY = FALSE
-         )));
+         self$propose(params);
+         par(mfrow = c(length(self$observation) ,1));
+         for(count in 1:length(self$observation)) {
+            if (length(x) == 0) {
+               xvar = self$observation[[count]];
+               yvar = NULL;
+               lineArgs$x <- self$prediction[[count]];
+            } else {
+               xvar = x;
+               yvar = self$observation[[count]];
+               lineArgs$x <- x;
+               lineArgs$y <- self$prediction[[count]];
+            }
+            plot(
+               x = xvar,
+               y = yvar,
+               ylab = ylabs[[count]],
+               ...
+            );
+            do.call(
+               what = lines,
+               args = lineArgs
+            );
+         }
       }
-   )
 );
-
-#' @name ObservationGeneratorNormalErr_generate
-#' 
-#' @title 
-#'   Generate an observation with normally distribute synthetic error
-#' 
-#' @description  
-#'   Generates synthetic observations for an objective function
-#'   based on the current prediction and independent, normally-distributed
-#'   error.
-#' 
-#' @return 
-#'   An object representing the synthetic observations 
-#'   
-NULL
-

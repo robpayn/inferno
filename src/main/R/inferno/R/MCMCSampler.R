@@ -40,8 +40,10 @@ NULL
 #'    an R6 class that extends the RandomVariable class, and implements 
 #'    the normalizedFit and markovStep methods.
 #' @param staticRealizations 
-#'    Number of realizations for the static 
-#'    Metropolis phase
+#'    Number of realizations for the static phase. The proposal distribution
+#'    will remain static over this period, but the results of the sampling
+#'    will begin to affect the proposal distribution that will be used during
+#'    the following adaptive phase.
 #' @param adaptiveRealizations 
 #'    Number of realizations for the phase
 #'    where the covariance used to constrain Markov Chain step size is
@@ -54,6 +56,7 @@ NULL
 #' @param writefiles 
 #'    A boolean switch used to determine if the output
 #'    of the analysis is written to files as the algorithm progresses.
+#'    Default value is TRUE, which will cause files to be written.
 #' @param outputPath 
 #'    The path to which output files are written.
 #'    By default, this path is "./output"
@@ -66,9 +69,26 @@ NULL
 #'    created and used.  This logs the accepted probability, the proposed
 #'    probability, and a boolean value indicating if the iteration was
 #'    accepted or not.
+#'    Default is a new instance of the basic statsLogger - \code{\link{StatsLogger}}.
 #' @return 
 #'    The object of class \code{AdaptiveMCMCSampler} created
 #'    by the constructor
+#'    
+#' @section Methods:
+#'   \code{$new}\cr
+#'   \code{$optimize} - 
+#'     See \code{\link{AdaptiveMCMCSampler_optimize}}\cr
+#'   \code{$optimize} - 
+#'     See \code{\link{AdaptiveMCMCSampler_propose}}\cr
+#'   \code{$plotPosteriorDensities} - 
+#'     See \code{\link{AdaptiveMCMCSampler_plotPosteriorDensities}}\cr
+#'   \code{$plotTraces} - 
+#'     See \code{\link{AdaptiveMCMCSampler_plotTraces}}\cr
+#'   \code{$plotHighestPosterior} - 
+#'     See \code{\link{AdaptiveMCMCSampler_plotHighestPosterior}}\cr
+#'   \code{$plotSummary} - 
+#'     See \code{\link{AdaptiveMCMCSampler_plotSummary}}\cr
+#'     
 AdaptiveMCMCSampler <- R6Class(
    classname = "AdaptiveMCMCSampler",
    public = list(
@@ -183,8 +203,30 @@ AdaptiveMCMCSampler <- R6Class(
                statsLogger$logAccepted(1);
             }
          );
-      },
-      optimize = function()
+      }
+   )
+);
+
+# Method AdaptiveMCMCSampler$optimize ####
+
+#' @name AdaptiveMCMCSampler_optimize
+#' 
+#' @title
+#'   Sample parameter space using an adaptive Markov Chain Monte Carlo algorithm
+#' 
+#' @usage 
+#'   [Object]$optimize()
+#' 
+#' @return 
+#'   No specific return value
+#' 
+#' @section Method of class:
+#'   \code{\link{AdaptiveMCMCSampler}}
+#'   
+AdaptiveMCMCSampler$set(
+   which = "public",
+   name = "optimize",
+   value = function()
       {
          # Set up the output files and write the first line
          if (self$writeFiles) {
@@ -257,8 +299,34 @@ AdaptiveMCMCSampler <- R6Class(
                proposalDist$markovStep(self$paramSamples[realizationCount - 1,]);
             self$propose(realizationCount);
          }
-      },
-      propose = function(index, prevIndex = index - 1)
+      }
+);
+
+# Method AdaptiveMCMCSampler$propose ####
+
+#' @name AdaptiveMCMCSampler_propose
+#' 
+#' @title
+#'   Propose a parameter set in the Markov Chain algorithm
+#' 
+#' @usage 
+#'   [Object]$propose(<arguments>)
+#' @param index
+#'   Index of the iteration for the current realization
+#' @param prevIndex
+#'   Index of the previous iteration.
+#'   Defaults to index - 1.
+#' 
+#' @return 
+#'   No specific return value
+#' 
+#' @section Method of class:
+#'   \code{\link{AdaptiveMCMCSampler}}
+#'   
+AdaptiveMCMCSampler$set(
+   which = "public",
+   name = "propose",
+   value = function(index, prevIndex = index - 1)
       {
          # Use the criterion object to determine if proposal
          # should be accepted
@@ -322,25 +390,36 @@ AdaptiveMCMCSampler <- R6Class(
             );
          }
          
-      },
-      plotTraces = function(indices = NULL, ...)
-      {
-         if(is.null(indices)) {
-            indices <- 1:self$totalRealizations;
-         } else if (indices == "adaptive") {
-            indices <- (self$totalStaticRealizations + 1):
-               self$totalRealizations;
-         } 
-         par(mfrow = c(self$numParams, 1), mar = c(4, 5, 1, 1));
-         for(paramIndex in 1:self$numParams) {
-            plot(
-               self$paramSamples[indices,paramIndex],
-               ylab = colnames(self$paramSamples)[paramIndex],
-               ...
-            );
-         }
-      },
-      plotPosteriorDensities = function(indices = "adaptive", ...)
+      }
+);
+
+# Method AdaptiveMCMCSampler$plotPosteriorDensities ####
+
+#' @name AdaptiveMCMCSampler_plotPosteriorDensities
+#' 
+#' @title
+#'   Plot the parameter distribution densities from a Markov Chain ensemble
+#' 
+#' @usage 
+#'   [Object]$plotPosteriorDensities(<arguments>)
+#' @param indices
+#'   The string "adaptive" for the plotting the ensemble from the adaptive phase,
+#'   or a vector of the specific indices to plot.
+#'   Default value is "adaptive".
+#' @param ...
+#'   Arguments passed to the plot function
+#' 
+#' @return 
+#'   No specific return value
+#' 
+#' @section Method of class:
+#'   \code{\link{AdaptiveMCMCSampler}}
+#'   
+
+AdaptiveMCMCSampler$set(
+   which = "public",
+   name = "plotPosteriorDensities",
+   value = function(indices = "adaptive", ...)
       {
          if (indices == "adaptive") {
             indices <- (self$totalStaticRealizations + 1):
@@ -357,15 +436,130 @@ AdaptiveMCMCSampler <- R6Class(
                ...
             );   
          }
-      },
-      plotHighestPosterior = function(...)
+      }
+);
+
+# Method AdaptiveMCMCSampler$plotTraces ####
+
+#' @name AdaptiveMCMCSampler_plotTraces
+#' 
+#' @title
+#'   Plot the traces from a Markov Chain analysis
+#'   
+#' @description 
+#'   Creates a series of trace plots, one panel per parameter
+#'   being estimated.
+#' 
+#' @usage 
+#'   [Object]$plotTraces(<arguments>)
+#' @param indices
+#'   The vector of indices to include in the plot
+#' @param mfrow
+#'   Two element vector containing the number of rows
+#'   and columns in which to arrange the plots.
+#'   Defaults to a single column with as many rows as
+#'   parameters being estimated.
+#' @param mar
+#'   The size of margins (in lines) for the plots within each panel.
+#'   Defaults to (bottom, left, top, right) = (4, 5, 1, 1).
+#' @param ...
+#'   Arguments passed on to the plot function
+#' 
+#' @return 
+#'   No specific return value
+#' 
+#' @section Method of class:
+#'   \code{\link{AdaptiveMCMCSampler}}
+#'   
+AdaptiveMCMCSampler$set(
+   which = "public",
+   name = "plotTraces",
+   value = function
+      (
+         indices = NULL, 
+         mfrow = c(self$numParams, 1),
+         mar = c(4, 5, 1, 1),
+         ...
+      )
+      {
+         if(is.null(indices)) {
+            indices <- 1:self$totalRealizations;
+         } else if (indices == "adaptive") {
+            indices <- (self$totalStaticRealizations + 1):
+               self$totalRealizations;
+         } 
+         par(mfrow = mfrow, mar = mar);
+         for(paramIndex in 1:self$numParams) {
+            plot(
+               self$paramSamples[indices,paramIndex],
+               ylab = colnames(self$paramSamples)[paramIndex],
+               ...
+            );
+         }
+      }
+);
+
+# Method AdaptiveMCMCSampler$plotHighestPosterior ####
+
+#' @name AdaptiveMCMCSampler_plotHighestPosterior
+#' 
+#' @title
+#'   Generate a plot comparing the best fit model to observations
+#' 
+#' @usage 
+#'   [Object]$plotHighestPosterior(<arguments>)
+#' @param ...
+#'   Arguments passed to the \code{\link{ObjectiveFunction_plotFit}} method
+#' 
+#' @return 
+#'   No specific return value
+#' 
+#' @section Method of class:
+#'   \code{\link{AdaptiveMCMCSampler}}
+#'   
+AdaptiveMCMCSampler$set(
+   which = "public",
+   name = "plotHighestPosterior",
+   value = function(...)
       {
          self$objFunc$plotFit(
             params = self$paramSamples[self$maxProbIndex,],
             ...
          );
-      },
-      plotSummary = function(
+      }
+);
+
+# Method AdaptiveMCMCSampler$plotSummary ####
+
+#' @name AdaptiveMCMCSampler_plotSummary
+#' 
+#' @title
+#'   Plot a summary of the analysis
+#' 
+#' @usage 
+#'   [Object]$plotSummary(<arguments>)
+#' @param device
+#'   Graphics device ("pdf", "windows", or "quartz")
+#' @param file
+#'   Path to the file to write (for "pdf" device only)
+#' @param width
+#'   Width of the device
+#'   Defaults to 8.5.
+#' @param height
+#'   Height of the device
+#'   Defaults to 10.
+#' 
+#' @return 
+#'   No specific return value
+#' 
+#' @section Method of class:
+#'   \code{\link{AdaptiveMCMCSampler}}
+#'   
+AdaptiveMCMCSampler$set(
+   which = "public",
+   name = "plotSummary",
+   value = function
+      (
          device = "pdf", 
          file = NULL,
          width = 8.5,
@@ -411,7 +605,6 @@ AdaptiveMCMCSampler <- R6Class(
             dev.off();
          }
       }
-   )
 );
 
 # Class Criterion (R6) ####
