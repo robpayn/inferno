@@ -11,13 +11,13 @@ NULL
 #'    Bayes posterior likelihood objective function class
 #' 
 #' @description 
-#' Provides the tools for calculating a Bayes posterior 
-#' likelihood value for the comparison of a model prediction and
-#' observations. The Bayes likelihood is calculated by adding
-#' the summed log likelihood from prior distributions of
-#' parameters to the log likelihood of a provided objective 
-#' function.
-#' Usage below is for the class constructor method.
+#'   Provides the tools for calculating a Bayes posterior 
+#'   likelihood value for the comparison of a model prediction and
+#'   observations. The Bayes likelihood is calculated by adding
+#'   the summed log likelihood from prior distributions of
+#'   parameters to the log likelihood of a provided objective 
+#'   function.
+#'   Usage below is for the class constructor method.
 #' 
 #' @usage 
 #'    BayesLogLikelihood$new(..., <arguments>)
@@ -43,9 +43,15 @@ NULL
 #' @seealso 
 #'    Extends the R6 class \code{\link{ObjectiveFunction}}
 #'    
-#'    Methods: \code{\link{BayesLogLikelihood_compare}}; 
-#'       \code{\link{BayesLogLikelihood_propose}};
-#'       \code{\link{BayesLogLikelihood_realize}}
+#' @section Extends:
+#'   \code{\link{ObjectiveFunction}}
+#'    
+#' @section Methods: 
+#'   $new
+#'   $compare - \code{\link{BayesLogLikelihood_compare}} \cr
+#'   $propose - \code{\link{BayesLogLikelihood_propose}} \cr
+#'   $realize - \code{\link{BayesLogLikelihood_realize}} \cr
+#'   
 BayesLogLikelihood <- R6Class(
    classname = "BayesLogLikelihood",
    inherit = ObjectiveFunction,
@@ -61,14 +67,10 @@ BayesLogLikelihood <- R6Class(
             negate = FALSE
          ) 
          {
-            # Parameter translator and prediction extractor are not 
-            # necessary
-            self$parameterTranslator <- NULL;
-            self$predictionExtractor <- NULL;
-            
             # Set the values of attributes based on
             # arguments to the constructor
             self$model <- logLikelihood$model;
+            self$simulator <- logLikelihood$simulator;
             self$negate <- negate;
             self$paramDists <- paramDists;
             self$logLikelihood <- logLikelihood;
@@ -86,12 +88,12 @@ BayesLogLikelihood <- R6Class(
 #'    Propose a model 
 #' 
 #' @description 
-#' Overrides the superclass propose method to call the base objective 
-#' function propose method, before adding the log of the prior probabilities
-#' to produce the Bayesian posterior likelihood.
+#'   Overrides the superclass propose method to call the base objective 
+#'   function propose method, before adding the log of the prior probabilities
+#'   to produce the Bayesian posterior likelihood.
 #' 
-#' Proposes a model with a given permutation represented by a subset of
-#' input
+#'   Proposes a model with a given permutation represented by a subset of
+#'   input
 #' 
 #' @usage 
 #'    [Object]$propose(params)
@@ -100,9 +102,12 @@ BayesLogLikelihood <- R6Class(
 #'    
 #' @return The value of the objective function 
 #' 
-#' @seealso 
-#'    Method of the R6 class \code{\link{BayesLogLikelihood}};
-#'    Overrides the method \code{\link{ObjectiveFunction_propose}}
+#' @section Method of class:
+#'   \code{\link{BayesLogLikelihood}}
+#'   
+#' @section Overrides:  
+#'    \code{\link{ObjectiveFunction_propose}}
+#'    
 BayesLogLikelihood$set(
    which = "public",
    name = "propose",
@@ -140,9 +145,11 @@ BayesLogLikelihood$set(
 #' @return 
 #'    The synthetic observation created
 #'    
-#' @seealso 
-#'    Method of the R6 class \code{\link{BayesLogLikelihood}}; 
-#'    Overrides the method \code{\link{ObjectiveFunction_realize}}
+#' @section Method of class: 
+#'   \code{\link{BayesLogLikelihood}}
+#'   
+#' @section Overrides:
+#'   \code{\link{ObjectiveFunction_realize}}
 #'    
 BayesLogLikelihood$set(
    which = "public",
@@ -164,17 +171,17 @@ BayesLogLikelihood$set(
 #'    Compare the prediction and observation
 #' 
 #' @description 
-#' Compares a list of prediction vectors to an associated list of
-#' observation vectors based on a Bayesian posterior likelihood.
+#'   Compares a list of prediction vectors to an associated list of
+#'   observation vectors based on a Bayesian posterior likelihood.
 #' 
-#' This objective function uses a base objective function that to which 
-#' the logarithms of prior probabilities are added to for a Bayesian 
-#' objective context. For example, a formal Bayes likelihood based on
-#' independent and normally distributed error would use a formal log
-#' likelihood as the base objective function.
+#'   This objective function uses a base objective function that to which 
+#'   the logarithms of prior probabilities are added to for a Bayesian 
+#'   objective context. For example, a formal Bayes likelihood based on
+#'   independent and normally distributed error would use a formal log
+#'   likelihood as the base objective function.
 #' 
-#' Note that handling of NA values depend on the "ignore.na" attribute
-#' that is configurable in the constructor. By default NAs are ignored.
+#'   Note that handling of NA values depend on the "ignore.na" attribute
+#'   that is configurable in the constructor. By default NAs are ignored.
 #' 
 #' @usage 
 #'    [Object]$compare(params)
@@ -187,9 +194,11 @@ BayesLogLikelihood$set(
 #' @return 
 #'    The log likelihood (will be negated if negate attribute is TRUE)
 #'    
-#' @seealso 
-#'    Method of the R6 class \code{\link{BayesLogLikelihood}}; 
-#'    Implements the abstract method \code{\link{ObjectiveFunction_compare}}
+#' @section Method of class:
+#'   \code{\link{BayesLogLikelihood}}
+#'    
+#' @section Implements: 
+#'   \code{\link{ObjectiveFunction_compare}}
 #'    
 BayesLogLikelihood$set(
    which = "public",
@@ -224,8 +233,8 @@ BayesLogLikelihood$set(
 #'    Markov Chain Bayesian stats logging tool
 #' 
 #' @description 
-#' Extends \code{StatsLogger} to include stats specific to a Bayesian likelihood.
-#' Usage below is for the class constructor method.
+#'   Extends \code{AdaptiveMCMCStatsLogger} to include stats specific to a Bayesian likelihood.
+#'   Usage below is for the class constructor method.
 #' 
 #' @usage 
 #'    StatsLoggerBayes$new(filePath = NULL, statsFile = "stats.csv")
@@ -238,54 +247,25 @@ BayesLogLikelihood$set(
 #'    The object of class \code{StatsLoggerBayes} created
 #'    by the constructor
 #'    
-#' @seealso 
-#'    Extends the R6 class \code{\link{StatsLogger}}
+#' @section Extends: 
+#'    \code{\link{AdaptiveMCMCStatsLogger}}
 #'    
-#'    Methods: \code{\link{StatsLoggerBayes_buildLog}}; 
-#'       \code{StatsLoggerBayes_logAccepted};
-#'       \code{StatsLoggerBayes_logProposed};
-#'       \code{StatsLoggerBayes_logRejected};
+#' @section Methods: 
+#'   $new
+#'   $buildLog - see \code{\link{StatsLoggerBayes_buildLog}} \cr
+#'   $logAccepted - see \code{\link{StatsLoggerBayes_logAccepted}} \cr
+#'   $logRejected - see \code{\link{StatsLoggerBayes_logRejected}} \cr
+#'   
 StatsLoggerBayes <- R6Class(
    classname = "StatsLoggerBayes",
-   inherit = StatsLogger,
+   inherit = AdaptiveMCMCStatsLogger,
    public = list(
       likelihoodColumn = NULL,
-      propLikelihoodColumn = NULL,
-      buildLog = function(numRows, ...)
-      {
-         super$buildLog(numRows, ...);
-         names(self$stats)[1] <- "posterior";
-         names(self$stats)[2] <- "propPosterior";
-         self$stats <- cbind(
-            self$stats,
-            data.frame(
-               likelihood = numeric(length = self$numRows),
-               propLikelihood = numeric(length = self$numRows)
-            )
-         );
-         self$likelihoodColumn <- length(self$stats) - 1;
-         self$propLikelihoodColumn <- length(self$stats) ;
-      },
-      logAccepted = function(index)
-      {
-         super$logAccepted(index);
-         self$stats[index, self$propLikelihoodColumn] <- 
-            self$objFunc$logLikelihood$value;
-         self$stats[index, self$likelihoodColumn] <- 
-            self$objFunc$logLikelihood$value;
-      },
-      logRejected = function(index)
-      {
-         super$logRejected(index);
-         self$stats[index, self$propLikelihoodColumn] <- 
-            self$objFunc$logLikelihood$value;
-         self$stats[index, self$likelihoodColumn] <- 
-            self$stats[index - 1, self$likelihoodColumn];
-      }
-   )
+      propLikelihoodColumn = NULL
+      )
 );
 
-# Roxygen Method StatsLoggerBayes_buildLog ####
+# Method StatsLoggerBayes$buildLog ####
 
 #' @name 
 #'    StatsLoggerBayes_buildLog
@@ -293,8 +273,8 @@ StatsLoggerBayes <- R6Class(
 #'    Build the logger data structures and files
 #' 
 #' @description 
-#' Overrides the superclass buildLog method to add the structures needed
-#' for tracking Bayesian specific statistics
+#'   Overrides the superclass buildLog method to add the structures needed
+#'   for tracking Bayesian specific statistics
 #' 
 #' @usage 
 #'    [Object]$buildLog(numRows, objFunc, filePath = "./output")
@@ -308,7 +288,80 @@ StatsLoggerBayes <- R6Class(
 #' @return 
 #'    No meaningful return value
 #'    
-#' @seealso 
-#'    Method of the R6 class \code{\link{StatsLoggerBayes}}; 
-#'    Overrides the method \code{\link{StatsLogger_buildLog}}
-NULL
+#' @section Method of class:
+#'   \code{\link{StatsLoggerBayes}}
+#'   
+#' @section Overrides:
+#'   \code{\link{AdaptiveMCMCStatsLogger_buildLog}}
+#'   
+StatsLoggerBayes$set(
+   which = "public",
+   name = "buildLog",
+   value = function(numRows, ...)
+      {
+         super$buildLog(numRows, ...);
+         names(self$stats)[1] <- "posterior";
+         names(self$stats)[2] <- "propPosterior";
+         self$stats <- cbind(
+            self$stats,
+            data.frame(
+               likelihood = numeric(length = self$numRows),
+               propLikelihood = numeric(length = self$numRows)
+            )
+         );
+         self$likelihoodColumn <- length(self$stats) - 1;
+         self$propLikelihoodColumn <- length(self$stats) ;
+      }
+);
+
+# Method StatsLoggerBayes$logAccepted ####
+
+#' @name StatsLoggerBayes_logAccepted
+#' 
+#' @title 
+#'   Create accepted log entries
+#' 
+#' @section Method of class:
+#'   \code{\link{StatsLoggerBayes}}
+#'   
+#' @section Overrides:
+#'   \code{\link{AdaptiveMCMCStatsLogger_logAccepted}}
+#'   
+StatsLoggerBayes$set(
+   which = "public",
+   name = "logAccepted",
+   value = function(index)
+      {
+         super$logAccepted(index);
+         self$stats[index, self$propLikelihoodColumn] <- 
+            self$objFunc$logLikelihood$value;
+         self$stats[index, self$likelihoodColumn] <- 
+            self$objFunc$logLikelihood$value;
+      }
+);
+
+# Method StatsLoggerBayes$logRejected ####
+
+#' @name StatsLoggerBayes_logRejected
+#' 
+#' @title 
+#'   Create rejected log entries
+#' 
+#' @section Method of class:
+#'   \code{\link{StatsLoggerBayes}}
+#'   
+#' @section Overrides:
+#'   \code{\link{AdaptiveMCMCStatsLogger_logRejected}}
+#'   
+StatsLoggerBayes$set(
+   which = "public",
+   name = "logRejected",
+   value = function(index)
+      {
+         super$logRejected(index);
+         self$stats[index, self$propLikelihoodColumn] <- 
+            self$objFunc$logLikelihood$value;
+         self$stats[index, self$likelihoodColumn] <- 
+            self$stats[index - 1, self$likelihoodColumn];
+      }
+);

@@ -25,20 +25,9 @@ NULL
 #' 
 #' @usage 
 #'   ObjectiveFunction$new(<arguments>)
-#' @param model 
-#'   The model used to generate the predictions to be
+#' @param simulator 
+#'   The simulator (see \code{\link{Simulator}}) used to generate the predictions to be
 #'   compared to the observations by the objective function
-#' @param parameterTranslator 
-#'   A parameter translator object that is capable
-#'   of translating a simple vector of parameter values and inserting them
-#'   into the appropriate attributes of the model object, such that
-#'   the following execution of the model will generation a prediction
-#'   corresponding to those parameter values.
-#' @param predictionExtractor 
-#'   A prediction extractor object that is capable
-#'   of extracting a set of simple vectors from the model output, which can
-#'   then be compared to the observations in calculation of the objective
-#'   function value.
 #' @param synthErrorProcessor 
 #'   An optional synthetic error processor object 
 #'   that can generate a synthetic observation based on some known structure
@@ -81,10 +70,9 @@ ObjectiveFunction <- R6Class(
    classname = "ObjectiveFunction",
    public = list(
       params = NULL,
-      parameterTranslator = NULL,
       model = NULL,
+      simulator = NULL,
       prediction = NULL,
-      predictionExtractor = NULL,
       synthPrediction = NULL,
       observation = NULL,
       observationGenerator = NULL,
@@ -92,33 +80,33 @@ ObjectiveFunction <- R6Class(
       value = NULL,
       initialize = function
          (
-            model,
-            parameterTranslator,
-            predictionExtractor,
+            simulator,
             observationGenerator = NULL,
             observation = NULL
          ) 
          {
-            self$model <- model;
-            self$parameterTranslator <- parameterTranslator;
-            self$predictionExtractor <- predictionExtractor;
+            self$model <- simulator$model;
+            self$simulator <- simulator;
             self$observationGenerator <- observationGenerator;
             if (!is.null(self$observationGenerator)) {
                if (!is.null(observation)) {
-                  stop(paste("Observation generator and ",
-                             "observation arguments cannot both be ", 
-                             "non-NULL vaulues."));
+                  stop(paste(
+                     "Observation generator and ",
+                     "observation arguments cannot both be ", 
+                     "non-NULL vaulues."
+                  ));
                }
-               self$observationGenerator$objFunc <- self;
-               self$model$run();
-               self$prediction <- self$predictionExtractor$extract();
+               #FIXME Need to switch to cleaner strategy pattern
+               self$prediction <- simulator$simulate();
                self$synthPrediction <- self$prediction;
                self$realize();
             } else {
                if (is.null(observation)) {
-                  stop(paste("Observation generator and ",
-                             "observation arguments cannot both be ", 
-                             "NULL vaulues."));
+                  stop(paste(
+                     "Observation generator and ",
+                     "observation arguments cannot both be ", 
+                     "NULL vaulues."
+                  ));
                }
                self$observation <- observation;
             }
@@ -154,9 +142,7 @@ ObjectiveFunction$set(
    value = function(params)
       {
          self$params <- params;
-         self$parameterTranslator$translate(params = params);
-         self$model$run();
-         self$prediction <- self$predictionExtractor$extract();
+         self$prediction <- self$simulator$simulate(params);
          if(is.null(self$prediction)) {
             self$multivariateValues <- rep(
                x = NA, 
@@ -197,7 +183,8 @@ ObjectiveFunction$set(
    name = "realize",
    value = function()
       {
-         self$observation <- self$observationGenerator$generate();
+         self$observation <- 
+            self$observationGenerator$generate(self$synthPrediction);
       }
 );
 

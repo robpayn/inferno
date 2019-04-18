@@ -18,7 +18,7 @@ NULL
 #'    log likelihoods.
 #' 
 #' @usage 
-#'    AdaptiveMCMCSampler$new(...)
+#'    AdaptiveMCMCSampler$new(<arguments>)
 #' @param objFunc 
 #'    The objective function used to calculate the base
 #'    likelihood.  The sum of the log prior likelihoods are added to this
@@ -65,11 +65,11 @@ NULL
 #'    output.  By default, "paramProposals.csv"
 #' @param statsLoggers 
 #'    A list of stats logger objects to use for writing statistics
-#'    to output. By default, an object of the \code{StatsLogger} class is
+#'    to output. 
+#'    By default, an object of the \code{\link{AdaptiveMCMCStatsLogger}} class is
 #'    created and used.  This logs the accepted probability, the proposed
 #'    probability, and a boolean value indicating if the iteration was
 #'    accepted or not.
-#'    Default is a new instance of the basic statsLogger - \code{\link{StatsLogger}}.
 #' @return 
 #'    The object of class \code{AdaptiveMCMCSampler} created
 #'    by the constructor
@@ -127,7 +127,7 @@ AdaptiveMCMCSampler <- R6Class(
          outputPath = "./output",
          paramProposalsFile = "paramProposals.csv",
          paramSamplesFile = "paramSamples.csv",
-         statsLoggers = list(basic = StatsLogger$new())
+         statsLoggers = list(basic = AdaptiveMCMCStatsLogger$new())
       )
       {
          # Assign attributes according to arguments
@@ -607,6 +607,7 @@ AdaptiveMCMCSampler$set(
       }
 );
 
+
 # Class Criterion (R6) ####
 
 #' @export
@@ -624,15 +625,36 @@ AdaptiveMCMCSampler$set(
 #' 
 #' @usage Abstract
 #' 
-Criterion <- R6Class(
-   classname = "Criterion",
-   public = list(
-      isAccepted = function(prob, probRef)
+#' @section Methods:
+#'   \code{$new}\cr
+#'   \code{$isAccepted} - 
+#'     See \code{\link{Criterion_isAccepted}}\cr
+Criterion <- R6Class(classname = "Criterion");
+
+# Abstract method Criterion$isAccepted ####
+
+#' @name Criterion_isAccepted
+#' 
+#' @title 
+#'   Determines if a probability justifies accepting a sample
+#'   
+#' @description 
+#'   This method is abstract, indicating that implementations of 
+#'   this class need to override this method or an error will be
+#'   thrown when it is called.
+#' 
+#' @section Abstract method of class:
+#'   \code{\link{Criterion}}
+#'   
+Criterion$set(
+   which = "public",
+   name = "isAccepted",
+   value = function(prob, probRef)
       {
          stop("Method 'isAccepted' has not been implemented");
       }
-   )
 );
+
 
 # Class CriterionMetropLogLikelihood (R6) ####
 
@@ -642,17 +664,51 @@ Criterion <- R6Class(
 #'    Metropolis election criterion class
 #' 
 #' @description 
-#'    Uses the Metropolis algorithm to determine if the proposed
-#'    probability is accepted.
+#'    Controls the criterion for a Metropolis algorithm
 #' 
 #' @usage 
-#'    StatsLogger$new(...)
+#'    CriterionMetropLogLikelihood$new(<arguments>)
 #'    
+#' @section Methods:
+#'   \code{$new}\cr
+#'   \code{$isAccepted} - 
+#'     See \code{\link{CriterionMetropLogLikelihood_isAccepted}}\cr
+#'     
 CriterionMetropLogLikelihood <- R6Class(
    classname = "CriterionMetropLogLikelihood",
-   inherit = Criterion,
-   public = list(
-      isAccepted = function(prob, probRef)
+   inherit = Criterion
+);
+
+
+# Method CriterionMetropLogLikelihood$isAccepted ####
+
+#' @name CriterionMetropLogLikelihood_isAccepted
+#' 
+#' @title 
+#'   Determines if a probability justifies accepting a sample
+#'   
+#' @description 
+#'   Uses a Metropolis stochastic criterion to determine if the 
+#'   probability of a sample is accepted based on a comparison 
+#'   with a reference probability
+#'   
+#' @usage
+#'   [Object]$isAccepted(<arguments>)
+#' @param prob
+#'   Probability to assess
+#' @param probRef
+#'   Reference probability for comparison
+#'   
+#' @return 
+#'   TRUE if accepted, FALSE otherwise
+#' 
+#' @section Abstract method of class:
+#'   \code{\link{CriterionMetropLogLikelihood}}
+#'   
+CriterionMetropLogLikelihood$set(
+   which = "public",
+   name = "isAccepted",
+   value = function(prob, probRef)
       {
          if(is.na(prob)) {
             delta <- 0;
@@ -661,164 +717,4 @@ CriterionMetropLogLikelihood <- R6Class(
          }
          return(runif(n = 1) < delta);
       }
-   )
 );
-
-# Class StatsLogger (R6) ####
-
-#' @export
-#' 
-#' @title
-#'    Markov Chain stats logging tool
-#' 
-#' @description
-#'    Logs the stats from a Markov Chain accpet/reject algorithm. Stats
-#'    are logged both to a matrix in memory and written to files, if configured
-#'    to do so.
-#' 
-#' @usage 
-#'    StatsLogger$new(...)
-#' @param filePath
-#'    Optional argument to set the path to which output files are written
-#' @param statsFile
-#'    Name of the file with logged stats data
-#'    
-#' @return The object of class \code{StatsLogger} created
-#'    by the constructor
-StatsLogger <- R6Class(
-   classname = "StatsLogger",
-   public = list(
-      numRows = NULL,
-      objFunc = NULL,
-      stats = NULL,
-      statsFile = NULL,
-      filePath = NULL,
-      isLoggingFailedPredictions = NULL,
-      initialize = function(
-         filePath = NULL, 
-         statsFile = "stats.csv",
-         isLoggingFailedPredictions = FALSE
-         )
-         {
-            self$filePath <- filePath;
-            self$isLoggingFailedPredictions <- 
-               isLoggingFailedPredictions;
-            
-            if(is.null(self$filePath)) {
-               self$statsFile <- statsFile;
-            } else {
-               self$statsFile <- paste(
-                  self$filePath,
-                  statsFile,
-                  sep = "/"
-               );
-            }
-         },
-      buildLog = function(numRows, objFunc, filePath = "./output")
-         {
-            self$numRows <- numRows;
-            self$objFunc <- objFunc;
-            self$stats <- data.frame(
-               objective = numeric(length = self$numRows),
-               propObjective = numeric(length = self$numRows),
-               wasAccepted = logical(length = self$numRows)
-            );
-            if (self$isLoggingFailedPredictions) {
-               self$stats <- cbind(
-                  self$stats, 
-                  data.frame(failedPred = logical(length = self$numRows))
-               );
-            }
-            if(is.null(self$filePath)) {
-               self$filePath <- filePath;
-               self$statsFile <- paste(
-                  self$filePath,
-                  self$statsFile,
-                  sep = "/"
-               );
-            }
-         },
-      logAccepted = function(index)
-         {
-            self$stats[index, 1] <- self$objFunc$value;
-            self$stats[index, 2] <- self$objFunc$value;
-            self$stats[index, 3] <- TRUE;
-            if (self$isLoggingFailedPredictions) {
-               self$logFailedPredictions(index);
-            }
-         },
-      logRejected = function(index)
-         {
-            self$stats[index, 1] <- self$stats[index - 1, 1];
-            self$stats[index, 2] <- self$objFunc$value;
-            self$stats[index, 3] <- FALSE;
-            if (self$isLoggingFailedPredictions) {
-               self$logFailedPredictions(index);
-            }
-         },
-      logFailedPredictions = function(index)
-         {
-            if (is.null(self$objFunc$prediction)) {
-               self$stats[index, 4] <- TRUE;   
-            } else {
-               self$stats[index, 4] <- FALSE;
-            }
-         },
-      writeFirstRow = function()
-      {
-         dir.create(
-            path = self$filePath, 
-            showWarnings = FALSE,
-            recursive = TRUE
-         );
-         write.table(
-            x = self$stats[1,], 
-            file = self$statsFile, 
-            append = FALSE,
-            sep = ",",
-            col.names = TRUE,
-            row.names = FALSE,
-            quote = TRUE
-         );
-      },
-      writeRow = function(index)
-      {
-         write.table(
-            x = self$stats[index,], 
-            file = self$statsFile, 
-            append = TRUE,
-            sep = ",",
-            col.names = FALSE,
-            row.names = FALSE,
-            quote = TRUE
-         );
-      }
-   )
-);
-
-# Roxygen Method StatsLogger_buildLog ####
-
-#' @name StatsLogger_buildLog
-#' 
-#' @title 
-#'    Build the logger data structures and files
-#' 
-#' @description 
-#'    Creates the data structures and files necessary to track
-#'    the statistics through a data analysis
-#' 
-#' @usage 
-#'    [Object]$buildLog(numRows, objFunc, filePath = "./output")
-#' @param numRows
-#'    Number of rows of data expected in the log
-#' @param objFunc
-#'    The objective function with the statistics to be logged
-#' @param filePath
-#'    The file path where log files should be created
-#'    
-#' @return 
-#'    No meaningful return value
-#'    
-#' @seealso 
-#'    Method of the R6 class \code{\link{StatsLogger}}; 
-NULL

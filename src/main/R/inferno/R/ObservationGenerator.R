@@ -24,11 +24,10 @@ NULL
 #'     See \code{\link{ObservationGenerator_generate}}\cr
 #'
 ObservationGenerator <- R6Class(
-   classname = "ObservationGenerator",
-   public = list(
-      objFunc = NULL
-   )
+   classname = "ObservationGenerator"
 );
+
+# Method ObservationGenerator$generate ####
 
 #' @name ObservationGenerator_generate
 #'   
@@ -41,6 +40,9 @@ ObservationGenerator <- R6Class(
 #' 
 #'   This method declaration will cause a program to fail if 
 #'   the method is called and the implementing class does not override it.
+#'   
+#' @param base
+#'   Basis for the synthetic observations
 #' 
 #' @return 
 #'   An object representing the synthetic observation 
@@ -51,12 +53,13 @@ ObservationGenerator <- R6Class(
 ObservationGenerator$set(
    which = "public",
    name = "generate",
-   value = function()
+   value = function(base)
       {
          stop("Abstract function 'ObservationGenerator$generate' 
               has not been implemented");
       }
 );
+
 
 # Class ObservationGeneratorNormalErr ####
 
@@ -87,15 +90,20 @@ ObservationGeneratorNormalErr <- R6Class(
    )
 );
 
+# Method ObservationGeneratorNormalErr$generate ####
+
 #' @name ObservationGeneratorNormalErr_generate
 #' 
 #' @title 
 #'   Generate an observation with normally distribute synthetic error
 #' 
 #' @description  
-#'   Generates synthetic observations for an objective function
-#'   based on the current prediction and independent, normally-distributed
-#'   error.
+#'   Generates synthetic observations based on normally-distributed
+#'   and independent error.
+#'   
+#' @param base
+#'   Basis for the synthetic observations. Normally distributed error
+#'   is added to the basis to create the observations.
 #' 
 #' @return 
 #'   An object representing the synthetic observations 
@@ -109,7 +117,7 @@ ObservationGeneratorNormalErr <- R6Class(
 ObservationGeneratorNormalErr$set(
    which = "public",
    name = "generate",
-   value = function()
+   value = function(base)
       {
          return(data.frame(mapply(
             FUN = function(pred, lengthPred, mean, sd) 
@@ -122,9 +130,9 @@ ObservationGeneratorNormalErr$set(
                   )
                );
             }, 
-            pred = self$objFunc$synthPrediction,
+            pred = base,
             lengthPred = lapply(
-               X = self$objFunc$synthPrediction,
+               X = base,
                FUN = length
                ),
             mean = self$mean,
@@ -134,11 +142,22 @@ ObservationGeneratorNormalErr$set(
       }
 );
 
+# Class ObservationGeneratorNormalAR1Err ####
+
 #' @export
 #' 
 #' @title 
 #'   Observation error generator for autocorrelated error
-#'   
+#' 
+#' @description 
+#'   A observation generator for residual error with 
+#'   random (normally distributed) and autocorrelated
+#'   components.
+#' 
+#' @section Methods:
+#'   \code{$generate} - 
+#'     See \code{\link{ObservationGeneratorNormalAR1Err_generate}}\cr
+#'
 ObservationGeneratorNormalAR1Err <- R6Class(
    classname = "ObservationGeneratorNormalAR1Err",
    inherit = ObservationGeneratorNormalErr,
@@ -152,12 +171,36 @@ ObservationGeneratorNormalAR1Err <- R6Class(
    )
 );
 
+# Method ObservationGeneratorNormalAR1Err$generate ####
+
+#' @name ObservationGeneratorNormalAR1Err_generate
+#' 
+#' @title 
+#'   Generate an observation with autocorrelated synthetic error
+#' 
+#' @description  
+#'   Generates synthetic observations based on components of
+#'   random (normally distributed) and autocorrelated error.
+#'   
+#' @param base
+#'   Basis for the synthetic observations. Synthetic error
+#'   is added to the basis to create the observations.
+#' 
+#' @return 
+#'   An object representing the synthetic observations 
+#'   
+#' @section Method of class:
+#'   \code{\link{ObservationGeneratorNormalAR1Err}}
+#'   
+#' @section Implements:
+#'   \code{\link{ObservationGenerator_generate}}
+#'   
 ObservationGeneratorNormalAR1Err$set(
    which = "public",
    name = "generate",
-   value = function()
+   value = function(base)
       {
-         observation <- self$objFunc$synthPrediction;
+         observation <- base;
          for (column in 1:length(observation)) {
             error <- rnorm(
                n = 1, 
@@ -168,7 +211,7 @@ ObservationGeneratorNormalAR1Err$set(
                observation[[column]][1] +
                error;
             
-            for (row in 2:length(self$objFunc$synthPrediction[[column]])) {
+            for (row in 2:length(observation[[column]])) {
                error <-
                   (self$arCoeff[[column]] * error) +
                   rnorm(

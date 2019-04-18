@@ -15,26 +15,15 @@ NULL
 #'   that is compared to an observation for calculation of an
 #'   objective function.
 #' 
-#' @usage
-#'   Model$new()
-#' 
 #' @return
 #'   This class is abstract and is not intended to be instantiated
 #'   directly.
 #'    
-#' @seealso 
-#'   Methods: \code{\link{Model_run}}
-Model <- R6Class(
-   classname = "Model",
-   public = list(
-      run = function() 
-      {
-         stop("Abstract function 'run' has not been implemented.");
-      }
-   )
-);
+#' @section Abstract methods: 
+#'   $run - see \code{\link{Model_run}}
+Model <- R6Class(classname = "Model");
 
-# Roxygen Method Model_run ####
+# Method Model$run ####
 
 #' @name Model_run
 #' 
@@ -51,16 +40,24 @@ Model <- R6Class(
 #' @return 
 #'   No required return value 
 #'    
-#' @seealso 
-#'   Method of the R6 class \code{\link{Model}}; 
-NULL
+#' @section Method of class: 
+#'   \code{\link{Model}}
+Model$set(
+   which = "public",
+   name = "run",
+   value = function() 
+      {
+         stop("Abstract function 'run' has not been implemented.");
+      }
+);
 
-# Class ParameterTranslator ####
+
+# Class ParameterTranslator (R6) ####
 
 #' @export
 #' 
 #' @title 
-#'   Abstract parameter processor class
+#'   Abstract parameter translator class
 #' 
 #' @description 
 #'   Configures a model for execution based translating model parameters from
@@ -72,8 +69,8 @@ NULL
 #'   directly. Inheriting parameter translator classes are specific to a given 
 #'   type of model input and the model that takes that input before execution.
 #' 
-#' @usage 
-#'   Abstract
+#' @section Abstract methods: 
+#'   $translate - see \code{\link{ParameterTranslator_translate}}
 #'   
 ParameterTranslator <- R6Class(
    classname = "ParameterTranslator",
@@ -82,14 +79,11 @@ ParameterTranslator <- R6Class(
       initialize = function(model)
       {
          self$model <- model;  
-      },
-      translate = function(params)
-      {
-         stop("Abstract function 'ParameterTranslator$translate' 
-              has not been implemented");
       }
    )
 );
+
+# Method ParameterTranslator$translate ####
 
 #' @name ParameterTranslator_translate
 #' 
@@ -104,11 +98,26 @@ ParameterTranslator <- R6Class(
 #'   This method declaration will cause a program to fail if 
 #'   the method is called and the implementing class does not override it.
 #' 
+#' @param params
+#'   Parameter values
+#' 
 #' @return 
-#'   No required return value 
-NULL
+#'   No defined return value 
+#'   
+#' @section Method of class: 
+#'   \code{\link{ParameterTranslator}}
+#'   
+ParameterTranslator$set(
+   which = "public",
+   name = "translate",
+   value = function(params)
+      {
+         stop("Abstract function 'ParameterTranslator$translate' 
+              has not been implemented");
+      }
+);
 
-# Class PredictionExtractor ####
+# Class PredictionExtractor (R6) ####
 
 #' @export
 #' 
@@ -125,27 +134,23 @@ NULL
 #'   directly. Inheriting parameter extractors are specific to a given 
 #'   type of model input and the model that takes that input before execution.
 #' 
-#' @usage 
-#'   Abstract
+#' @section Abstract methods: 
+#'   $extract - see \code{\link{PredictionExtractor_extract}}
 #'   
 PredictionExtractor <- R6Class(
    classname = "PredictionExtractor",
    public = list(
       model = NULL,
       initialize = function(model)
-      {
-         self$model <- model;  
-      },
-      extract = function()
-      {
-         stop("Abstract function 'PredictionExtractor$extract' 
-              has not been implemented");
-      }
+         {
+            self$model <- model;  
+         }
    )
 );
 
-#' @name 
-#'   PredictionExtractor_extract
+# Method PredictionExtractor$extract ####
+
+#' @name PredictionExtractor_extract
 #' 
 #' @title 
 #'   Extract prediction from output (abstract) 
@@ -161,4 +166,17 @@ PredictionExtractor <- R6Class(
 #' @return 
 #'   An object representing the subset of model output
 #'    
-NULL
+#' @section Method of class: 
+#'   \code{\link{PredictionExtractor}}
+#'   
+PredictionExtractor$set(
+   which = "public",
+   name = "extract",
+   value = function()
+      {
+         stop(paste(
+            "Abstract function 'PredictionExtractor$extract'", 
+            "has not been implemented"
+         ));
+      }
+);
