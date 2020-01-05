@@ -8,7 +8,7 @@ NULL
 #' @export
 #' 
 #' @title
-#'    An Adaptive Markov Chain Monte Carlo Sampler
+#'    R6 class defining an adaptive MCMC sampler
 #' 
 #' @description 
 #'    Provides the tools for executing an optimization using a
@@ -17,103 +17,163 @@ NULL
 #'    configurable, but by default is the Metropolis criterion for
 #'    log likelihoods.
 #' 
-#' @usage 
-#'    AdaptiveMCMCSampler$new(<arguments>)
-#' @param objFunc 
-#'    The objective function used to calculate the base
-#'    likelihood.  The sum of the log prior likelihoods are added to this
-#'    to generate the overall value of the objective function
-#' @param initialParams 
-#'    A vector with initial values for the parameter 
-#'    being estimated
-#'    (initial location in parameter space for the Markov Chain)
-#' @param burninProposalDist 
-#'    The random variable used to generate random
-#'    steps in the Markov Chain during the burnin phase. This should be 
-#'    an R6 class that extends the RandomVariable class, and implements 
-#'    the normalizedFit and markovStep methods.
-#' @param burninRealizations 
-#'    Number of realizations for the burnin phase
-#' @param staticProposalDist 
-#'    The random variable used to generate random
-#'    steps in the Markov Chain during the static phase. This should be 
-#'    an R6 class that extends the RandomVariable class, and implements 
-#'    the normalizedFit and markovStep methods.
-#' @param staticRealizations 
-#'    Number of realizations for the static phase. The proposal distribution
-#'    will remain static over this period, but the results of the sampling
-#'    will begin to affect the proposal distribution that will be used during
-#'    the following adaptive phase.
-#' @param adaptiveRealizations 
-#'    Number of realizations for the phase
-#'    where the covariance used to constrain Markov Chain step size is
-#'    adapted according to the covariance of previous accepted parameter
-#'    sets in the ensemble.
-#' @param criterion 
-#'    The critrerion object used for determining if a
-#'    propsed parameter set is accepted or rejected. By default, a 
-#'    criterion that assumes log likelihoods is used.
-#' @param writefiles 
-#'    A boolean switch used to determine if the output
-#'    of the analysis is written to files as the algorithm progresses.
-#'    Default value is TRUE, which will cause files to be written.
-#' @param outputPath 
-#'    The path to which output files are written.
-#'    By default, this path is "./output"
-#' @param paramProposalsFile 
-#'    The file name for the proposed paramater
-#'    output.  By default, "paramProposals.csv"
-#' @param statsLoggers 
-#'    A list of stats logger objects to use for writing statistics
-#'    to output. 
-#'    By default, an object of the \code{\link{AdaptiveMCMCStatsLogger}} class is
-#'    created and used.  This logs the accepted probability, the proposed
-#'    probability, and a boolean value indicating if the iteration was
-#'    accepted or not.
-#' @return 
-#'    The object of class \code{AdaptiveMCMCSampler} created
-#'    by the constructor
-#'    
-#' @section Methods:
-#'   \code{$new}\cr
-#'   \code{$optimize} - 
-#'     See \code{\link{AdaptiveMCMCSampler_optimize}}\cr
-#'   \code{$optimize} - 
-#'     See \code{\link{AdaptiveMCMCSampler_propose}}\cr
-#'   \code{$plotPosteriorDensities} - 
-#'     See \code{\link{AdaptiveMCMCSampler_plotPosteriorDensities}}\cr
-#'   \code{$plotTraces} - 
-#'     See \code{\link{AdaptiveMCMCSampler_plotTraces}}\cr
-#'   \code{$plotHighestPosterior} - 
-#'     See \code{\link{AdaptiveMCMCSampler_plotHighestPosterior}}\cr
-#'   \code{$plotSummary} - 
-#'     See \code{\link{AdaptiveMCMCSampler_plotSummary}}\cr
-#'     
 AdaptiveMCMCSampler <- R6Class(
    classname = "AdaptiveMCMCSampler",
    public = list(
+      
+      #' @field objFunc
+      #'   The objective function used to calculate the likelihood of a 
+      #'   given sample of parameter values.
       objFunc = NULL,
+      
+      #' @field prevProb
+      #'   The probablity from the previous iteration of the Markov Chain
       prevProb = NULL,
+      
+      #' @field maxProb
+      #'   The maximum probability in the Markov Chain
       maxProb = NULL,
+      
+      #' @field maxProbIndex
+      #'   The index of the iteration with the maximum probability
       maxProbIndex = NULL,
+      
+      #' @field initialParams
+      #'   The initial parameter values used to start the Markov Chain
       initialParams = NULL,
+      
+      #' @field numParams
+      #'   The number of parameters to be estimated
       numParams = NULL,
+      
+      #' @field burninRealizations
+      #'   The number of iterations in the burnin phase
       burninRealizations = NULL,
+      
+      #' @field startCovarianceIndex
+      #'   The index of the first iteration where the covariance of the
+      #'   Markov Chain is calculated (start of static phase)
       startCovarianceIndex = NULL,
+      
+      #' @field staticRealizations
+      #'   The number of iterations in the static phase
       staticRealizations = NULL,
+       
+      #' @field totalStaticRealizations
+      #'   Total number of iterations with a static proposal distribution
+      #'   (burnin and static phases)
       totalStaticRealizations = NULL,
+      
+      #' @field adaptiveRealizations
+      #'   The number of iterations in the adaptive phase
       adaptiveRealizations = NULL,
+      
+      #' @field totalRealizations
+      #'   The total number of iterations (burnin, static, and adaptive phases)
       totalRealizations = NULL,
+      
+      #' @field paramSamples
+      #'   Data frame tracking the sampled (accepted) parameter value sets
       paramSamples = NULL,
+      
+      #' @field paramSamplesFile
+      #'   File for tracking the parameter samples
       paramSamplesFile = NULL,
+      
+      #' @field paramProposals
+      #'   Data frame tracking the proposed parameter value sets
       paramProposals = NULL,
+      
+      #' @field paramProposalsFile
+      #'   File for tracking the proposed parameter value sets
       paramProposalsFile = NULL,
+      
+      #' @field statsLoggers
+      #'   The object used to log the statistics from each iteration
       statsLoggers = NULL,
+      
+      #' @field outputPath
+      #'   The path to the directory where output is written
       outputPath = NULL,
+      
+      #' @field writeFiles
+      #'   A boolean flag indicating if progress should be tracked
+      #'   in files (value of TRUE will cause files to be written)
       writeFiles = NULL,
+      
+      #' @field burninProposalDist
+      #'   The proposal distribution to use during the burnin phase
       burninProposalDist = NULL,
+      
+      #' @field staticProposalDist
+      #'   The proposal distribution to use during the static phase
       staticProposalDist = NULL,
+      
+      #' @field criterion
+      #'   The criterion object to use for the decision to accept
+      #'   or reject a proposed parameter set
       criterion = NULL,
+
+      # Method AdaptiveMCMCSampler$new ####
+      #
+      #' @description 
+      #'   Construct a new instance of the class
+      #'   
+      #' @param objFunc 
+      #'    The objective function used to calculate the likelihood of a 
+      #'    given sample of parameter values.
+      #' @param initialParams 
+      #'    A vector with initial values for the parameter 
+      #'    being estimated
+      #'    (initial location in parameter space for the Markov Chain)
+      #' @param burninProposalDist 
+      #'    The random variable used to generate random
+      #'    steps in the Markov Chain during the burnin phase. This should be 
+      #'    an R6 class that extends the RandomVariable class, and implements 
+      #'    the normalizedFit and markovStep methods.
+      #' @param burninRealizations 
+      #'    Number of realizations for the burnin phase
+      #' @param staticProposalDist 
+      #'    The random variable used to generate random
+      #'    steps in the Markov Chain during the static phase. This should be 
+      #'    an R6 class that extends the RandomVariable class, and implements 
+      #'    the normalizedFit and markovStep methods.
+      #' @param staticRealizations 
+      #'    Number of realizations for the static phase. The proposal distribution
+      #'    will remain static over this period, but the results of the sampling
+      #'    will begin to affect the proposal distribution that will be used during
+      #'    the following adaptive phase.
+      #' @param adaptiveRealizations 
+      #'    Number of realizations for the phase
+      #'    where the covariance used to constrain Markov Chain step size is
+      #'    adapted according to the covariance of previous accepted parameter
+      #'    sets in the ensemble.
+      #' @param criterion 
+      #'    The critrerion object used for determining if a
+      #'    propsed parameter set is accepted or rejected. By default, a 
+      #'    criterion that assumes log likelihoods is used.
+      #' @param writeFiles 
+      #'    A boolean switch used to determine if the output
+      #'    of the analysis is written to files as the algorithm progresses.
+      #'    Default value is TRUE, which will cause files to be written.
+      #' @param outputPath 
+      #'    The path to which output files are written.
+      #'    By default, this path is "./output"
+      #' @param paramProposalsFile 
+      #'    Optional file name for the proposed paramater values
+      #'    output.  
+      #'    Defaults to "paramProposals.csv"
+      #' @param paramSamplesFile
+      #'    Optional file name for the sampled parameter values
+      #'    Defaults to "paramSamples.csv".
+      #' @param statsLoggers 
+      #'    A list of stats logger objects to use for writing statistics
+      #'    to output. 
+      #'    By default, an object of the \code{\link{AdaptiveMCMCStatsLogger}} class is
+      #'    created and used.  This logs the accepted probability, the proposed
+      #'    probability, and a boolean value indicating if the iteration was
+      #'    accepted or not.
+      #'    
       initialize = function(
          objFunc, 
          initialParams, 
@@ -203,30 +263,17 @@ AdaptiveMCMCSampler <- R6Class(
                statsLogger$logAccepted(1);
             }
          );
-      }
-   )
-);
-
-# Method AdaptiveMCMCSampler$optimize ####
-
-#' @name AdaptiveMCMCSampler_optimize
-#' 
-#' @title
-#'   Sample parameter space using an adaptive Markov Chain Monte Carlo algorithm
-#' 
-#' @usage 
-#'   [Object]$optimize()
-#' 
-#' @return 
-#'   No specific return value
-#' 
-#' @section Method of class:
-#'   \code{\link{AdaptiveMCMCSampler}}
-#'   
-AdaptiveMCMCSampler$set(
-   which = "public",
-   name = "optimize",
-   value = function()
+      },
+      
+      # Method AdaptiveMCMCSampler$optimize ####
+      #
+      #' @description
+      #'   Sample parameter space using an adaptive Markov Chain Monte Carlo algorithm
+      #' 
+      #' @return 
+      #'   No defined return value
+      #'   
+      optimize = function()
       {
          # Set up the output files and write the first line
          if (self$writeFiles) {
@@ -292,41 +339,30 @@ AdaptiveMCMCSampler$set(
             # ensemble
             covarianceIndices <- self$startCovarianceIndex:prevRealization;
             proposalDist$normalizedFit(self$paramSamples[covarianceIndices,]);
-
+            
             # Take a Markov Chain step in parameter space based on an
             # adapted covariance and propose the new parameter set 
             self$paramProposals[realizationCount,] <- 
                proposalDist$markovStep(self$paramSamples[realizationCount - 1,]);
             self$propose(realizationCount);
          }
-      }
-);
-
-# Method AdaptiveMCMCSampler$propose ####
-
-#' @name AdaptiveMCMCSampler_propose
-#' 
-#' @title
-#'   Propose a parameter set in the Markov Chain algorithm
-#' 
-#' @usage 
-#'   [Object]$propose(<arguments>)
-#' @param index
-#'   Index of the iteration for the current realization
-#' @param prevIndex
-#'   Index of the previous iteration.
-#'   Defaults to index - 1.
-#' 
-#' @return 
-#'   No specific return value
-#' 
-#' @section Method of class:
-#'   \code{\link{AdaptiveMCMCSampler}}
-#'   
-AdaptiveMCMCSampler$set(
-   which = "public",
-   name = "propose",
-   value = function(index, prevIndex = index - 1)
+      },
+      
+      # Method AdaptiveMCMCSampler$propose ####
+      #
+      #' @description
+      #'   Propose a parameter set in the Markov Chain algorithm
+      #' 
+      #' @param index
+      #'   Index of the iteration for the current realization
+      #' @param prevIndex
+      #'   Index of the previous iteration.
+      #'   Defaults to index - 1.
+      #' 
+      #' @return 
+      #'   No defined return value
+      #'   
+      propose = function(index, prevIndex = index - 1)
       {
          # Use the criterion object to determine if proposal
          # should be accepted
@@ -334,7 +370,7 @@ AdaptiveMCMCSampler$set(
             self$objFunc$propose(self$paramProposals[index,]),
             self$prevProb
          );
-
+         
          # Record results of current realization depending on whether
          # proposed parameter set is accepted or rejected relative to
          # previous Markov Chain step
@@ -349,9 +385,9 @@ AdaptiveMCMCSampler$set(
             lapply(
                X = self$statsLoggers,
                FUN = function(statsLogger) 
-                  {
-                     statsLogger$logAccepted(index);
-                  }
+               {
+                  statsLogger$logAccepted(index);
+               }
             );
          } else {
             # Reject the proposed parameters
@@ -359,9 +395,9 @@ AdaptiveMCMCSampler$set(
             lapply(
                X = self$statsLoggers,
                FUN = function(statsLogger) 
-                  {
-                     statsLogger$logRejected(index);
-                  }
+               {
+                  statsLogger$logRejected(index);
+               }
             );
          }
          
@@ -384,42 +420,29 @@ AdaptiveMCMCSampler$set(
             lapply(
                X = self$statsLoggers,
                FUN = function(statsLogger) 
-                  {
-                     statsLogger$writeRow(index);
-                  }
+               {
+                  statsLogger$writeRow(index);
+               }
             );
          }
-         
-      }
-);
-
-# Method AdaptiveMCMCSampler$plotPosteriorDensities ####
-
-#' @name AdaptiveMCMCSampler_plotPosteriorDensities
-#' 
-#' @title
-#'   Plot the parameter distribution densities from a Markov Chain ensemble
-#' 
-#' @usage 
-#'   [Object]$plotPosteriorDensities(<arguments>)
-#' @param indices
-#'   The string "adaptive" for the plotting the ensemble from the adaptive phase,
-#'   or a vector of the specific indices to plot.
-#'   Default value is "adaptive".
-#' @param ...
-#'   Arguments passed to the plot function
-#' 
-#' @return 
-#'   No specific return value
-#' 
-#' @section Method of class:
-#'   \code{\link{AdaptiveMCMCSampler}}
-#'   
-
-AdaptiveMCMCSampler$set(
-   which = "public",
-   name = "plotPosteriorDensities",
-   value = function(indices = "adaptive", ...)
+      },
+      
+      # Method AdaptiveMCMCSampler$plotPosteriorDensities ####
+      #
+      #' @description
+      #'   Plot the parameter distribution densities from a Markov Chain ensemble
+      #' 
+      #' @param indices
+      #'   The string "adaptive" for the plotting the ensemble from the adaptive phase,
+      #'   or a vector of the specific indices to plot.
+      #'   Default value is "adaptive".
+      #' @param ...
+      #'   Arguments passed to the plot.default function
+      #' 
+      #' @return 
+      #'   No defined return value
+      #'   
+      plotPosteriorDensities = function(indices = "adaptive", ...)
       {
          if (indices == "adaptive") {
             indices <- (self$totalStaticRealizations + 1):
@@ -436,45 +459,31 @@ AdaptiveMCMCSampler$set(
                ...
             );   
          }
-      }
-);
-
-# Method AdaptiveMCMCSampler$plotTraces ####
-
-#' @name AdaptiveMCMCSampler_plotTraces
-#' 
-#' @title
-#'   Plot the traces from a Markov Chain analysis
-#'   
-#' @description 
-#'   Creates a series of trace plots, one panel per parameter
-#'   being estimated.
-#' 
-#' @usage 
-#'   [Object]$plotTraces(<arguments>)
-#' @param indices
-#'   The vector of indices to include in the plot
-#' @param mfrow
-#'   Two element vector containing the number of rows
-#'   and columns in which to arrange the plots.
-#'   Defaults to a single column with as many rows as
-#'   parameters being estimated.
-#' @param mar
-#'   The size of margins (in lines) for the plots within each panel.
-#'   Defaults to (bottom, left, top, right) = (4, 5, 1, 1).
-#' @param ...
-#'   Arguments passed on to the plot function
-#' 
-#' @return 
-#'   No specific return value
-#' 
-#' @section Method of class:
-#'   \code{\link{AdaptiveMCMCSampler}}
-#'   
-AdaptiveMCMCSampler$set(
-   which = "public",
-   name = "plotTraces",
-   value = function
+      },
+      
+      # Method AdaptiveMCMCSampler$plotTraces ####
+      #
+      #' @description 
+      #'   Creates a series of trace plots, one panel per parameter
+      #'   being estimated.
+      #' 
+      #' @param indices
+      #'   The vector of indices to include in the plot
+      #' @param mfrow
+      #'   Two element vector containing the number of rows
+      #'   and columns in which to arrange the plots.
+      #'   Defaults to a single column with as many rows as
+      #'   parameters being estimated.
+      #' @param mar
+      #'   The size of margins (in lines) for the plots within each panel.
+      #'   Defaults to (bottom, left, top, right) = (4, 5, 1, 1).
+      #' @param ...
+      #'   Arguments passed on to the plot function
+      #' 
+      #' @return 
+      #'   No defined return value
+      #'   
+      plotTraces = function
       (
          indices = NULL, 
          mfrow = c(self$numParams, 1),
@@ -496,69 +505,47 @@ AdaptiveMCMCSampler$set(
                ...
             );
          }
-      }
-);
-
-# Method AdaptiveMCMCSampler$plotHighestPosterior ####
-
-#' @name AdaptiveMCMCSampler_plotHighestPosterior
-#' 
-#' @title
-#'   Generate a plot comparing the best fit model to observations
-#' 
-#' @usage 
-#'   [Object]$plotHighestPosterior(<arguments>)
-#' @param ...
-#'   Arguments passed to the \code{\link{ObjectiveFunction_plotFit}} method
-#' 
-#' @return 
-#'   No specific return value
-#' 
-#' @section Method of class:
-#'   \code{\link{AdaptiveMCMCSampler}}
-#'   
-AdaptiveMCMCSampler$set(
-   which = "public",
-   name = "plotHighestPosterior",
-   value = function(...)
+      },
+      
+      # Method AdaptiveMCMCSampler$plotHighestPosterior ####
+      #
+      #' @description
+      #'   Generate a plot comparing the best fit model to observations
+      #' 
+      #' @param ...
+      #'   Arguments passed to the \code{\link{ObjectiveFunction}} plotFit method
+      #' 
+      #' @return 
+      #'   No defined return value
+      #' 
+      plotHighestPosterior = function(...)
       {
          self$objFunc$plotFit(
             params = self$paramSamples[self$maxProbIndex,],
             ...
          );
-      }
-);
-
-# Method AdaptiveMCMCSampler$plotSummary ####
-
-#' @name AdaptiveMCMCSampler_plotSummary
-#' 
-#' @title
-#'   Plot a summary of the analysis
-#' 
-#' @usage 
-#'   [Object]$plotSummary(<arguments>)
-#' @param device
-#'   Graphics device ("pdf", "windows", or "quartz")
-#' @param file
-#'   Path to the file to write (for "pdf" device only)
-#' @param width
-#'   Width of the device
-#'   Defaults to 8.5.
-#' @param height
-#'   Height of the device
-#'   Defaults to 10.
-#' 
-#' @return 
-#'   No specific return value
-#' 
-#' @section Method of class:
-#'   \code{\link{AdaptiveMCMCSampler}}
-#'   
-AdaptiveMCMCSampler$set(
-   which = "public",
-   name = "plotSummary",
-   value = function
+      },
+      
+      # Method AdaptiveMCMCSampler$plotSummary ####
+      #
+      #' @description
+      #'   Plot a summary of the analysis
+      #' 
+      #' @param device
+      #'   Graphics device ("pdf", "windows", or "quartz")
+      #' @param file
+      #'   Path to the file to write (for "pdf" device only)
+      #' @param width
+      #'   Width of the device
+      #'   Defaults to 8.5.
+      #' @param height
+      #'   Height of the device
+      #'   Defaults to 10.
+      #' 
+      #' @return 
+      #'   No defined return value
+      #' 
+      plotSummary = function
       (
          device = "pdf", 
          file = NULL,
@@ -605,6 +592,8 @@ AdaptiveMCMCSampler$set(
             dev.off();
          }
       }
+   
+   )
 );
 
 
@@ -613,7 +602,7 @@ AdaptiveMCMCSampler$set(
 #' @export
 #' 
 #' @title 
-#'    Abstract selection criterion class
+#'    R6 class defining a criterion for a sampler
 #' 
 #' @description 
 #'    A selection criterion object can determine if a given proposal is
@@ -623,36 +612,34 @@ AdaptiveMCMCSampler$set(
 #'    directly. Inheriting parameter processors are specific to a given 
 #'    type of model input and the model that takes that input before execution.
 #' 
-#' @usage Abstract
-#' 
-#' @section Methods:
-#'   \code{$new}\cr
-#'   \code{$isAccepted} - 
-#'     See \code{\link{Criterion_isAccepted}}\cr
-Criterion <- R6Class(classname = "Criterion");
-
-# Abstract method Criterion$isAccepted ####
-
-#' @name Criterion_isAccepted
-#' 
-#' @title 
-#'   Determines if a probability justifies accepting a sample
-#'   
-#' @description 
-#'   This method is abstract, indicating that implementations of 
-#'   this class need to override this method or an error will be
-#'   thrown when it is called.
-#' 
-#' @section Abstract method of class:
-#'   \code{\link{Criterion}}
-#'   
-Criterion$set(
-   which = "public",
-   name = "isAccepted",
-   value = function(prob, probRef)
+Criterion <- R6Class(
+   classname = "Criterion",
+   public = list(
+      
+      # Abstract method Criterion$isAccepted ####
+      #
+      #' @description 
+      #'   Determine if the provided probability is acceptable or not
+      #' 
+      #'   This method is abstract, indicating that implementations of 
+      #'   this class need to override this method or an error will be
+      #'   thrown when it is called.
+      #' 
+      #' @param prob
+      #'   Probability being evaluated
+      #' @param probRef
+      #'   Reference probability for comparison
+      #' @param ...
+      #' 
+      #' @return 
+      #'   TRUE if accepted, FALSE otherwise
+      #'   
+      isAccepted = function(...)
       {
-         stop("Method 'isAccepted' has not been implemented");
+         stop("Method Criterion$isAccepted has not been implemented.");
       }
+      
+   )
 );
 
 
@@ -661,54 +648,34 @@ Criterion$set(
 #' @export
 #' 
 #' @title 
-#'    Metropolis election criterion class
+#'    R6 class defining a metropolis log likelihood criterion
 #' 
 #' @description 
-#'    Controls the criterion for a Metropolis algorithm
+#'    Provides the ability to evaluate the criterion for a Metropolis algorithm
 #' 
-#' @usage 
-#'    CriterionMetropLogLikelihood$new(<arguments>)
-#'    
-#' @section Methods:
-#'   \code{$new}\cr
-#'   \code{$isAccepted} - 
-#'     See \code{\link{CriterionMetropLogLikelihood_isAccepted}}\cr
-#'     
 CriterionMetropLogLikelihood <- R6Class(
    classname = "CriterionMetropLogLikelihood",
-   inherit = Criterion
-);
-
-
-# Method CriterionMetropLogLikelihood$isAccepted ####
-
-#' @name CriterionMetropLogLikelihood_isAccepted
-#' 
-#' @title 
-#'   Determines if a probability justifies accepting a sample
-#'   
-#' @description 
-#'   Uses a Metropolis stochastic criterion to determine if the 
-#'   probability of a sample is accepted based on a comparison 
-#'   with a reference probability
-#'   
-#' @usage
-#'   [Object]$isAccepted(<arguments>)
-#' @param prob
-#'   Probability to assess
-#' @param probRef
-#'   Reference probability for comparison
-#'   
-#' @return 
-#'   TRUE if accepted, FALSE otherwise
-#' 
-#' @section Abstract method of class:
-#'   \code{\link{CriterionMetropLogLikelihood}}
-#'   
-CriterionMetropLogLikelihood$set(
-   which = "public",
-   name = "isAccepted",
-   value = function(prob, probRef)
+   inherit = Criterion,
+   public = list(
+      # Method CriterionMetropLogLikelihood$isAccepted ####
+      #
+      #' @description 
+      #'   Determine if the provided probability is acceptable or not
+      #'   using a Metropolis criterion
+      #'   
+      #'   Uses a Metropolis stochastic criterion to determine if the 
+      #'   probability of a sample is accepted based on a comparison 
+      #'   with a reference probability
+      #'   
+      #' @param prob
+      #'   Probability to assess
+      #' @param probRef
+      #'   Reference probability for comparison
+      #'   
+      #' @return 
+      #'   TRUE if accepted, FALSE otherwise
+      #' 
+      isAccepted = function(prob, probRef)
       {
          if(is.na(prob)) {
             delta <- 0;
@@ -717,4 +684,5 @@ CriterionMetropLogLikelihood$set(
          }
          return(runif(n = 1) < delta);
       }
-);
+   )
+)

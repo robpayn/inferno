@@ -8,29 +8,63 @@ NULL
 #' @export
 #' 
 #' @title 
-#'   Log likelihood based on first order autocorrelation
+#'   R6 class defining an AR1 log likelihood objective function
+#' 
+#' @description 
+#'   An objective function based on a log likelihood considering a
+#'   first-order autocorrelation in the residual error.
 #'   
 LogLikelihoodAR1 <- R6Class(
    classname = "LogLikelihoodAR1",
    inherit = LogLikelihood,
    public = list(
-         arCoeff = NULL,
-         initialize = function(..., arCoeff)
-            {
-               super$initialize(...);
-               self$arCoeff <- arCoeff;
-            }
-      )
-);
-
-LogLikelihoodAR1$set(
-   which = "public",
-   name = "compare",
-   value = function(params)
+      
+      #' @field arCoeff
+      #'   The first-order autoregression coefficient
+      arCoeff = NULL,
+      
+      # Method LogLikelihoodAR1$new ####
+      # 
+      #' @description 
+      #'   Construct a new instance of the class
+      #'   
+      #' @param ...
+      #'   Arguments to pass to the constructor of the super class
+      #' @param arCoeff
+      #'   The autoregression coefficient
+      #'   
+      initialize = function(..., arCoeff)
+      {
+         super$initialize(...);
+         self$arCoeff <- arCoeff;
+      },
+      
+      # Method LogLikelihoodAR1$compare ####
+      #
+      #' @description 
+      #'   Overrides the compare method in the super class to add consideration
+      #'   of autocorrelation.
+      #' 
+      #'   Compares a list of prediction vectors to an associated list of
+      #'   observation vectors based on a formal log likelihood function
+      #'   and assumption of a normal distribution of residual error with
+      #'   first-order autocorrelation.
+      #' 
+      #'   Note that handling of NA values depend on the "ignore.na" attribute
+      #'   that is configurable in the constructor. By default NAs are ignored.
+      #'   
+      #' @param params
+      #'   Vector of values for parameters being estimated
+      #'   
+      #' @return 
+      #'   The log likelihood with consideration of first-order autocorrelation
+      #'   in error (will be negated if negate attribute is TRUE)
+      #'     
+      compare = function(params)
       {
          # Replace any estimated error paramaters with their values
          # from the proposed parameter vector
-      
+         
          sd <- self$sd;
          replaceSDIndices <- which(is.nan(sd));
          numSDIndices <- length(replaceSDIndices);
@@ -82,4 +116,6 @@ LogLikelihoodAR1$set(
             return(logLike);
          }
       }
-);
+
+   )
+)
