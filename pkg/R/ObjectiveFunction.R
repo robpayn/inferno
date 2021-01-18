@@ -57,6 +57,10 @@ ObjectiveFunction <- R6Class(
       #'   artificial data for Monte Carlo realizations
       observationGenerator = NULL,
       
+      #' @field traceFunction
+      #'   An optional function to call with the results of each proposal
+      traceFunction = NULL,
+      
       #' @field multivariateValues
       #'   The vector of values representing objective function value for 
       #'   each column of the observation
@@ -100,7 +104,8 @@ ObjectiveFunction <- R6Class(
       (
          simulator,
          observationGenerator = NULL,
-         observation = NULL
+         observation = NULL,
+         traceFunction = NULL
       ) 
       {
          self$model <- simulator$model;
@@ -128,6 +133,7 @@ ObjectiveFunction <- R6Class(
             }
             self$observation <- observation;
          }
+         self$traceFunction <- traceFunction;
       },
       
       # Method ObjectiveFunction$propose ####
@@ -155,6 +161,9 @@ ObjectiveFunction <- R6Class(
          } else {
             self$multivariateValues <- self$compare(params);
             self$value <- sum(self$multivariateValues);
+         }
+         if (!is.null(self$traceFunction)) {
+            self$traceFunction(params, self$prediction, self$value);
          }
          return(self$value);
       },
