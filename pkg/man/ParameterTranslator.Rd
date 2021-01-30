@@ -25,6 +25,7 @@ translator}
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{ParameterTranslator$new()}}
+\item \href{#method-setModel}{\code{ParameterTranslator$setModel()}}
 \item \href{#method-translate}{\code{ParameterTranslator$translate()}}
 \item \href{#method-clone}{\code{ParameterTranslator$clone()}}
 }
@@ -35,13 +36,31 @@ translator}
 \subsection{Method \code{new()}}{
 Construct a new instance of the class
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ParameterTranslator$new(model)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ParameterTranslator$new(model = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{model}}{The model for which the parameter translator generates input}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setModel"></a>}}
+\if{latex}{\out{\hypertarget{method-setModel}{}}}
+\subsection{Method \code{setModel()}}{
+Set the model for which parameters are translated
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ParameterTranslator$setModel(model)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{model}}{The model with parameters that are altered by calling 
+the translate method.}
 }
 \if{html}{\out{</div>}}
 }

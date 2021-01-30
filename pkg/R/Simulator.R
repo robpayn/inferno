@@ -60,8 +60,26 @@ Simulator <- R6Class(
       )
       {
          self$parameterTranslator <- parameterTranslator;
-         self$model <- model;
          self$predictionExtractor <- predictionExtractor;
+         if (!is.null(model)) {
+            self$setModel(model = model);
+         }
+      },
+      
+      #' @description 
+      #'   Set the model used by the simulator
+      #' 
+      #' @param model
+      #'   The model used by the simulator to generate predictions
+      #'   from a given parameter set
+      #'
+      setModel = function(model)
+      {
+         self$model <- model;
+         self$parameterTranslator$setModel(model = model);
+         self$predictionExtractor$setModel(model = model);
+         
+         invisible(NULL);
       },
       
       # Method Simulator$simulate ####

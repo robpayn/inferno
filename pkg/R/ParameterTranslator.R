@@ -36,9 +36,25 @@ ParameterTranslator <- R6Class(
       #' @param model
       #'   The model for which the parameter translator generates input
       #' 
-      initialize = function(model)
+      initialize = function(model = NULL)
       {
-         self$model <- model;  
+         if (!is.null(model)) {
+            self$setModel(model = model);  
+         }
+      },
+      
+      #' @description 
+      #'   Set the model for which parameters are translated
+      #' 
+      #' @param model
+      #'   The model with parameters that are altered by calling 
+      #'   the translate method.
+      #'
+      setModel = function(model)
+      {
+         self$model <- model;
+         
+         invisible(NULL);
       },
       
       # Method ParameterTranslator$translate ####

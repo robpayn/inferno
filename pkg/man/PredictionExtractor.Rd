@@ -24,6 +24,7 @@ Extracts a relatively simple subset of model ouptut used to compare
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{PredictionExtractor$new()}}
+\item \href{#method-setModel}{\code{PredictionExtractor$setModel()}}
 \item \href{#method-extract}{\code{PredictionExtractor$extract()}}
 \item \href{#method-clone}{\code{PredictionExtractor$clone()}}
 }
@@ -34,13 +35,31 @@ Extracts a relatively simple subset of model ouptut used to compare
 \subsection{Method \code{new()}}{
 Constructs a new instance of the class
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PredictionExtractor$new(model)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PredictionExtractor$new(model = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{model}}{The model from which the output is extracted}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setModel"></a>}}
+\if{latex}{\out{\hypertarget{method-setModel}{}}}
+\subsection{Method \code{setModel()}}{
+Set the model from which predictions are extracted
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PredictionExtractor$setModel(model)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{model}}{The model with output that can be extracted as a
+prediction by the extract method.}
 }
 \if{html}{\out{</div>}}
 }

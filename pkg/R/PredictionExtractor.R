@@ -36,9 +36,25 @@ PredictionExtractor <- R6Class(
       #' @param model
       #'   The model from which the output is extracted
       #' 
-      initialize = function(model)
+      initialize = function(model = NULL)
       {
-         self$model <- model;  
+         if (!is.null(model)) {
+            self$setModel(model = model);  
+         }
+      },
+      
+      #' @description 
+      #'   Set the model from which predictions are extracted
+      #' 
+      #' @param model
+      #'   The model with output that can be extracted as a
+      #'   prediction by the extract method.
+      #'
+      setModel = function(model)
+      {
+         self$model <- model;
+         
+         invisible(NULL);
       },
       
       # Method PredictionExtractor$extract ####

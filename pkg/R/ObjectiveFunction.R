@@ -72,8 +72,6 @@ ObjectiveFunction <- R6Class(
       #'   The calculated value of the objective function for the last proposal
       value = NULL,
       
-      # Method ObjectiveFunction$new ####
-      #
       #' @description 
       #'   Construct a new instance of the class
       #' 
@@ -93,13 +91,19 @@ ObjectiveFunction <- R6Class(
       #'   The observations to compare to the predictions
       #'   by the objective function. Observations should be a data frame with
       #'   the same number of rows and columns as the prediction.
-      #'    
       #'   Note that any observations provided as an
       #'   argument will be overwritten if a valid synthetic error processor is
       #'   provided. This argument defaults to a null value, so it is optional
       #'   if a synthetic error processor is provided. The object cannot be constructed
       #'   if the synthErrorProcessor and observation arguments are both NULL.
-      #'   
+      #' @param traceFunction
+      #'   An optional function for running a trace. If not NULL, this function will 
+      #'   be called every time the propose method is called. The function is called in
+      #'   the form: traceFunction(params, prediction, value).Therefore, the function 
+      #'   passed to this argument should be able to handle a
+      #'   params argument, a preduction argument, and a value argument suitable for
+      #'   the specific objective function.
+      #'    
       initialize = function
       (
          simulator,
@@ -108,7 +112,9 @@ ObjectiveFunction <- R6Class(
          traceFunction = NULL
       ) 
       {
-         self$model <- simulator$model;
+         if (!is.null(simulator$model)) {
+            self$model <- simulator$model;
+         }
          self$simulator <- simulator;
          self$observationGenerator <- observationGenerator;
          if (!is.null(self$observationGenerator)) {
@@ -124,20 +130,40 @@ ObjectiveFunction <- R6Class(
             self$synthPrediction <- self$prediction;
             self$realize();
          } else {
-            if (is.null(observation)) {
-               stop(paste(
-                  "Observation generator and ",
-                  "observation arguments cannot both be ", 
-                  "NULL vaulues."
-               ));
-            }
             self$observation <- observation;
          }
          self$traceFunction <- traceFunction;
       },
       
-      # Method ObjectiveFunction$propose ####
-      #
+      #' @description 
+      #'   Set the model used by the simulator
+      #' 
+      #' @param model
+      #'   The model used by the simulator to generate predictions
+      #'   from a given parameter set
+      #'
+      setModel = function(model)
+      {
+         self$model <- model;
+         self$simulator$setModel(model = model);
+         
+         invisible(NULL);
+      },
+      
+      #' @description 
+      #'   Set the observation to which the prediction is compared
+      #' 
+      #' @param observation
+      #'   The data frame specifying the observation(s) to which
+      #'   the prediction(s) are compared to calculate the value
+      #'
+      setObservation = function(observation)
+      {
+         self$observation <- observation;
+         
+         invisible(NULL);
+      },
+      
       #' @description 
       #'    Proposes a model with a given permutation represented by a subset of
       #'    input
@@ -150,6 +176,13 @@ ObjectiveFunction <- R6Class(
       #'    
       propose = function(params)
       {
+         if (is.null(self$observation)) {
+            stop(paste(
+               "Proposal cannot be evaluated because an observation",
+               "has not been defined"
+            ));
+         }         
+         
          self$params <- params;
          self$prediction <- self$simulator$simulate(params);
          if(is.null(self$prediction)) {
@@ -168,8 +201,6 @@ ObjectiveFunction <- R6Class(
          return(self$value);
       },
       
-      # Method ObjectiveFunction$realize ####
-      #
       #' @description 
       #'    Generates a new realization of the observation based on the observation generator
       #'    provided. Will cause an error if called and an observation generator attribute
@@ -185,8 +216,6 @@ ObjectiveFunction <- R6Class(
          return(self$observation);
       },
       
-      # Method ObjectiveFunction$compare ####
-      #
       #' @description 
       #'    A class that inherits from ObjectiveFunction must implement a 
       #'    "compare" method that will compare a prediciton to an observation. 
@@ -206,8 +235,6 @@ ObjectiveFunction <- R6Class(
          stop("Method ObjectiveFunction$compare has not been implemented.");
       },
       
-      # Method ObjectiveFunction$plotFit ####
-      #
       #' @description 
       #'   Plots the prediction based on the provided parameters 
       #'   on the same axes as the observations

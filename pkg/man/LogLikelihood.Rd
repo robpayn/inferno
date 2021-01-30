@@ -38,6 +38,8 @@ The R6 class generator for a log likelihood objective function
 \item \out{<span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="plotFit">}\href{../../inferno/html/ObjectiveFunction.html#method-plotFit}{\code{inferno::ObjectiveFunction$plotFit()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="propose">}\href{../../inferno/html/ObjectiveFunction.html#method-propose}{\code{inferno::ObjectiveFunction$propose()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="realize">}\href{../../inferno/html/ObjectiveFunction.html#method-realize}{\code{inferno::ObjectiveFunction$realize()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="setModel">}\href{../../inferno/html/ObjectiveFunction.html#method-setModel}{\code{inferno::ObjectiveFunction$setModel()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="setObservation">}\href{../../inferno/html/ObjectiveFunction.html#method-setObservation}{\code{inferno::ObjectiveFunction$setObservation()}}\out{</span>}
 }
 \out{</details>}
 }

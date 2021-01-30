@@ -25,6 +25,7 @@ A simulator is designed to run a model based on a limited amount of
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{Simulator$new()}}
+\item \href{#method-setModel}{\code{Simulator$setModel()}}
 \item \href{#method-simulate}{\code{Simulator$simulate()}}
 \item \href{#method-clone}{\code{Simulator$clone()}}
 }
@@ -53,6 +54,24 @@ corresponding to those parameter values.}
 of extracting a set of simple vectors from the model output, which can
 then be compared to the observations in calculation of the objective
 function value.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setModel"></a>}}
+\if{latex}{\out{\hypertarget{method-setModel}{}}}
+\subsection{Method \code{setModel()}}{
+Set the model used by the simulator
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Simulator$setModel(model)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{model}}{The model used by the simulator to generate predictions
+from a given parameter set}
 }
 \if{html}{\out{</div>}}
 }

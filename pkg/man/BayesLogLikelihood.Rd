@@ -46,6 +46,8 @@ function value}
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="plotFit">}\href{../../inferno/html/ObjectiveFunction.html#method-plotFit}{\code{inferno::ObjectiveFunction$plotFit()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="setModel">}\href{../../inferno/html/ObjectiveFunction.html#method-setModel}{\code{inferno::ObjectiveFunction$setModel()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="setObservation">}\href{../../inferno/html/ObjectiveFunction.html#method-setObservation}{\code{inferno::ObjectiveFunction$setObservation()}}\out{</span>}
 }
 \out{</details>}
 }

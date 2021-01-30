@@ -35,6 +35,8 @@ compared to the observation}
 \item{\code{observationGenerator}}{An optional observation generator that can be used to generate
 artificial data for Monte Carlo realizations}
 
+\item{\code{traceFunction}}{An optional function to call with the results of each proposal}
+
 \item{\code{multivariateValues}}{The vector of values representing objective function value for 
 each column of the observation
 and prediction data frames. These values are summed to provide the
@@ -48,6 +50,8 @@ overall value of the objective function.}
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{ObjectiveFunction$new()}}
+\item \href{#method-setModel}{\code{ObjectiveFunction$setModel()}}
+\item \href{#method-setObservation}{\code{ObjectiveFunction$setObservation()}}
 \item \href{#method-propose}{\code{ObjectiveFunction$propose()}}
 \item \href{#method-realize}{\code{ObjectiveFunction$realize()}}
 \item \href{#method-compare}{\code{ObjectiveFunction$compare()}}
@@ -64,7 +68,8 @@ Construct a new instance of the class
 \if{html}{\out{<div class="r">}}\preformatted{ObjectiveFunction$new(
   simulator,
   observationGenerator = NULL,
-  observation = NULL
+  observation = NULL,
+  traceFunction = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -86,12 +91,54 @@ facilitatin Monte Carlo error propagation algorithms.}
 \item{\code{observation}}{The observations to compare to the predictions
 by the objective function. Observations should be a data frame with
 the same number of rows and columns as the prediction.
- 
 Note that any observations provided as an
 argument will be overwritten if a valid synthetic error processor is
 provided. This argument defaults to a null value, so it is optional
 if a synthetic error processor is provided. The object cannot be constructed
 if the synthErrorProcessor and observation arguments are both NULL.}
+
+\item{\code{traceFunction}}{An optional function for running a trace. If not NULL, this function will 
+be called every time the propose method is called. The function is called in
+the form: traceFunction(params, prediction, value).Therefore, the function 
+passed to this argument should be able to handle a
+params argument, a preduction argument, and a value argument suitable for
+the specific objective function.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setModel"></a>}}
+\if{latex}{\out{\hypertarget{method-setModel}{}}}
+\subsection{Method \code{setModel()}}{
+Set the model used by the simulator
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ObjectiveFunction$setModel(model)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{model}}{The model used by the simulator to generate predictions
+from a given parameter set}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setObservation"></a>}}
+\if{latex}{\out{\hypertarget{method-setObservation}{}}}
+\subsection{Method \code{setObservation()}}{
+Set the observation to which the prediction is compared
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ObjectiveFunction$setObservation(observation)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{observation}}{The data frame specifying the observation(s) to which
+the prediction(s) are compared to calculate the value}
 }
 \if{html}{\out{</div>}}
 }
