@@ -23,15 +23,15 @@ Extracts a relatively simple subset of model ouptut used to compare
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{PredictionExtractor$new()}}
-\item \href{#method-setModel}{\code{PredictionExtractor$setModel()}}
-\item \href{#method-extract}{\code{PredictionExtractor$extract()}}
-\item \href{#method-clone}{\code{PredictionExtractor$clone()}}
+\item \href{#method-PredictionExtractor-new}{\code{PredictionExtractor$new()}}
+\item \href{#method-PredictionExtractor-setModel}{\code{PredictionExtractor$setModel()}}
+\item \href{#method-PredictionExtractor-extract}{\code{PredictionExtractor$extract()}}
+\item \href{#method-PredictionExtractor-clone}{\code{PredictionExtractor$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-PredictionExtractor-new"></a>}}
+\if{latex}{\out{\hypertarget{method-PredictionExtractor-new}{}}}
 \subsection{Method \code{new()}}{
 Constructs a new instance of the class
 \subsection{Usage}{
@@ -47,8 +47,8 @@ Constructs a new instance of the class
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setModel"></a>}}
-\if{latex}{\out{\hypertarget{method-setModel}{}}}
+\if{html}{\out{<a id="method-PredictionExtractor-setModel"></a>}}
+\if{latex}{\out{\hypertarget{method-PredictionExtractor-setModel}{}}}
 \subsection{Method \code{setModel()}}{
 Set the model from which predictions are extracted
 \subsection{Usage}{
@@ -65,8 +65,8 @@ prediction by the extract method.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-extract"></a>}}
-\if{latex}{\out{\hypertarget{method-extract}{}}}
+\if{html}{\out{<a id="method-PredictionExtractor-extract"></a>}}
+\if{latex}{\out{\hypertarget{method-PredictionExtractor-extract}{}}}
 \subsection{Method \code{extract()}}{
 A class that inherits from PredictionExtractor must implement an 
   "extract" method that will extract the desired subset of model
@@ -83,8 +83,8 @@ An object representing the subset of model output
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-PredictionExtractor-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-PredictionExtractor-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

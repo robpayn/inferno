@@ -49,19 +49,19 @@ overall value of the objective function.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{ObjectiveFunction$new()}}
-\item \href{#method-setModel}{\code{ObjectiveFunction$setModel()}}
-\item \href{#method-setObservation}{\code{ObjectiveFunction$setObservation()}}
-\item \href{#method-propose}{\code{ObjectiveFunction$propose()}}
-\item \href{#method-realize}{\code{ObjectiveFunction$realize()}}
-\item \href{#method-compare}{\code{ObjectiveFunction$compare()}}
-\item \href{#method-plotFit}{\code{ObjectiveFunction$plotFit()}}
-\item \href{#method-clone}{\code{ObjectiveFunction$clone()}}
+\item \href{#method-ObjectiveFunction-new}{\code{ObjectiveFunction$new()}}
+\item \href{#method-ObjectiveFunction-setModel}{\code{ObjectiveFunction$setModel()}}
+\item \href{#method-ObjectiveFunction-setObservation}{\code{ObjectiveFunction$setObservation()}}
+\item \href{#method-ObjectiveFunction-propose}{\code{ObjectiveFunction$propose()}}
+\item \href{#method-ObjectiveFunction-realize}{\code{ObjectiveFunction$realize()}}
+\item \href{#method-ObjectiveFunction-compare}{\code{ObjectiveFunction$compare()}}
+\item \href{#method-ObjectiveFunction-plotFit}{\code{ObjectiveFunction$plotFit()}}
+\item \href{#method-ObjectiveFunction-clone}{\code{ObjectiveFunction$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-ObjectiveFunction-new"></a>}}
+\if{latex}{\out{\hypertarget{method-ObjectiveFunction-new}{}}}
 \subsection{Method \code{new()}}{
 Construct a new instance of the class
 \subsection{Usage}{
@@ -108,8 +108,8 @@ the specific objective function.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setModel"></a>}}
-\if{latex}{\out{\hypertarget{method-setModel}{}}}
+\if{html}{\out{<a id="method-ObjectiveFunction-setModel"></a>}}
+\if{latex}{\out{\hypertarget{method-ObjectiveFunction-setModel}{}}}
 \subsection{Method \code{setModel()}}{
 Set the model used by the simulator
 \subsection{Usage}{
@@ -126,8 +126,8 @@ from a given parameter set}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setObservation"></a>}}
-\if{latex}{\out{\hypertarget{method-setObservation}{}}}
+\if{html}{\out{<a id="method-ObjectiveFunction-setObservation"></a>}}
+\if{latex}{\out{\hypertarget{method-ObjectiveFunction-setObservation}{}}}
 \subsection{Method \code{setObservation()}}{
 Set the observation to which the prediction is compared
 \subsection{Usage}{
@@ -144,8 +144,8 @@ the prediction(s) are compared to calculate the value}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-propose"></a>}}
-\if{latex}{\out{\hypertarget{method-propose}{}}}
+\if{html}{\out{<a id="method-ObjectiveFunction-propose"></a>}}
+\if{latex}{\out{\hypertarget{method-ObjectiveFunction-propose}{}}}
 \subsection{Method \code{propose()}}{
 Proposes a model with a given permutation represented by a subset of
    input
@@ -165,8 +165,8 @@ The value of the objective function
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-realize"></a>}}
-\if{latex}{\out{\hypertarget{method-realize}{}}}
+\if{html}{\out{<a id="method-ObjectiveFunction-realize"></a>}}
+\if{latex}{\out{\hypertarget{method-ObjectiveFunction-realize}{}}}
 \subsection{Method \code{realize()}}{
 Generates a new realization of the observation based on the observation generator
    provided. Will cause an error if called and an observation generator attribute
@@ -180,8 +180,8 @@ The artificial observation created
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-compare"></a>}}
-\if{latex}{\out{\hypertarget{method-compare}{}}}
+\if{html}{\out{<a id="method-ObjectiveFunction-compare"></a>}}
+\if{latex}{\out{\hypertarget{method-ObjectiveFunction-compare}{}}}
 \subsection{Method \code{compare()}}{
 A class that inherits from ObjectiveFunction must implement a 
    "compare" method that will compare a prediciton to an observation. 
@@ -205,8 +205,8 @@ The value calculated from the comparison
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-plotFit"></a>}}
-\if{latex}{\out{\hypertarget{method-plotFit}{}}}
+\if{html}{\out{<a id="method-ObjectiveFunction-plotFit"></a>}}
+\if{latex}{\out{\hypertarget{method-ObjectiveFunction-plotFit}{}}}
 \subsection{Method \code{plotFit()}}{
 Plots the prediction based on the provided parameters 
   on the same axes as the observations
@@ -246,8 +246,8 @@ No defined return value
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-ObjectiveFunction-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-ObjectiveFunction-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

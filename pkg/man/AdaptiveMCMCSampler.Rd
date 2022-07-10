@@ -67,19 +67,19 @@ or reject a proposed parameter set}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{AdaptiveMCMCSampler$new()}}
-\item \href{#method-optimize}{\code{AdaptiveMCMCSampler$optimize()}}
-\item \href{#method-propose}{\code{AdaptiveMCMCSampler$propose()}}
-\item \href{#method-plotPosteriorDensities}{\code{AdaptiveMCMCSampler$plotPosteriorDensities()}}
-\item \href{#method-plotTraces}{\code{AdaptiveMCMCSampler$plotTraces()}}
-\item \href{#method-plotHighestPosterior}{\code{AdaptiveMCMCSampler$plotHighestPosterior()}}
-\item \href{#method-plotSummary}{\code{AdaptiveMCMCSampler$plotSummary()}}
-\item \href{#method-clone}{\code{AdaptiveMCMCSampler$clone()}}
+\item \href{#method-AdaptiveMCMCSampler-new}{\code{AdaptiveMCMCSampler$new()}}
+\item \href{#method-AdaptiveMCMCSampler-optimize}{\code{AdaptiveMCMCSampler$optimize()}}
+\item \href{#method-AdaptiveMCMCSampler-propose}{\code{AdaptiveMCMCSampler$propose()}}
+\item \href{#method-AdaptiveMCMCSampler-plotPosteriorDensities}{\code{AdaptiveMCMCSampler$plotPosteriorDensities()}}
+\item \href{#method-AdaptiveMCMCSampler-plotTraces}{\code{AdaptiveMCMCSampler$plotTraces()}}
+\item \href{#method-AdaptiveMCMCSampler-plotHighestPosterior}{\code{AdaptiveMCMCSampler$plotHighestPosterior()}}
+\item \href{#method-AdaptiveMCMCSampler-plotSummary}{\code{AdaptiveMCMCSampler$plotSummary()}}
+\item \href{#method-AdaptiveMCMCSampler-clone}{\code{AdaptiveMCMCSampler$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-AdaptiveMCMCSampler-new"></a>}}
+\if{latex}{\out{\hypertarget{method-AdaptiveMCMCSampler-new}{}}}
 \subsection{Method \code{new()}}{
 Construct a new instance of the class
 \subsection{Usage}{
@@ -161,8 +161,8 @@ accepted or not.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-optimize"></a>}}
-\if{latex}{\out{\hypertarget{method-optimize}{}}}
+\if{html}{\out{<a id="method-AdaptiveMCMCSampler-optimize"></a>}}
+\if{latex}{\out{\hypertarget{method-AdaptiveMCMCSampler-optimize}{}}}
 \subsection{Method \code{optimize()}}{
 Sample parameter space using an adaptive Markov Chain Monte Carlo algorithm
 \subsection{Usage}{
@@ -174,8 +174,8 @@ No defined return value
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-propose"></a>}}
-\if{latex}{\out{\hypertarget{method-propose}{}}}
+\if{html}{\out{<a id="method-AdaptiveMCMCSampler-propose"></a>}}
+\if{latex}{\out{\hypertarget{method-AdaptiveMCMCSampler-propose}{}}}
 \subsection{Method \code{propose()}}{
 Propose a parameter set in the Markov Chain algorithm
 \subsection{Usage}{
@@ -197,8 +197,8 @@ No defined return value
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-plotPosteriorDensities"></a>}}
-\if{latex}{\out{\hypertarget{method-plotPosteriorDensities}{}}}
+\if{html}{\out{<a id="method-AdaptiveMCMCSampler-plotPosteriorDensities"></a>}}
+\if{latex}{\out{\hypertarget{method-AdaptiveMCMCSampler-plotPosteriorDensities}{}}}
 \subsection{Method \code{plotPosteriorDensities()}}{
 Plot the parameter distribution densities from a Markov Chain ensemble
 \subsection{Usage}{
@@ -221,8 +221,8 @@ No defined return value
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-plotTraces"></a>}}
-\if{latex}{\out{\hypertarget{method-plotTraces}{}}}
+\if{html}{\out{<a id="method-AdaptiveMCMCSampler-plotTraces"></a>}}
+\if{latex}{\out{\hypertarget{method-AdaptiveMCMCSampler-plotTraces}{}}}
 \subsection{Method \code{plotTraces()}}{
 Creates a series of trace plots, one panel per parameter
   being estimated.
@@ -257,8 +257,8 @@ No defined return value
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-plotHighestPosterior"></a>}}
-\if{latex}{\out{\hypertarget{method-plotHighestPosterior}{}}}
+\if{html}{\out{<a id="method-AdaptiveMCMCSampler-plotHighestPosterior"></a>}}
+\if{latex}{\out{\hypertarget{method-AdaptiveMCMCSampler-plotHighestPosterior}{}}}
 \subsection{Method \code{plotHighestPosterior()}}{
 Generate a plot comparing the best fit model to observations
 \subsection{Usage}{
@@ -277,8 +277,8 @@ No defined return value
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-plotSummary"></a>}}
-\if{latex}{\out{\hypertarget{method-plotSummary}{}}}
+\if{html}{\out{<a id="method-AdaptiveMCMCSampler-plotSummary"></a>}}
+\if{latex}{\out{\hypertarget{method-AdaptiveMCMCSampler-plotSummary}{}}}
 \subsection{Method \code{plotSummary()}}{
 Plot a summary of the analysis
 \subsection{Usage}{
@@ -310,8 +310,8 @@ No defined return value
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-AdaptiveMCMCSampler-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-AdaptiveMCMCSampler-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

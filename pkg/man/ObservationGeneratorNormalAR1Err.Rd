@@ -21,20 +21,20 @@ A observation generator for residual error with
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{ObservationGeneratorNormalAR1Err$new()}}
-\item \href{#method-generate}{\code{ObservationGeneratorNormalAR1Err$generate()}}
-\item \href{#method-clone}{\code{ObservationGeneratorNormalAR1Err$clone()}}
+\item \href{#method-ObservationGeneratorNormalAR1Err-new}{\code{ObservationGeneratorNormalAR1Err$new()}}
+\item \href{#method-ObservationGeneratorNormalAR1Err-generate}{\code{ObservationGeneratorNormalAR1Err$generate()}}
+\item \href{#method-ObservationGeneratorNormalAR1Err-clone}{\code{ObservationGeneratorNormalAR1Err$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-ObservationGeneratorNormalAR1Err-new"></a>}}
+\if{latex}{\out{\hypertarget{method-ObservationGeneratorNormalAR1Err-new}{}}}
 \subsection{Method \code{new()}}{
 Construct a new instance of the clas
 \subsection{Usage}{
@@ -52,8 +52,8 @@ Construct a new instance of the clas
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-generate"></a>}}
-\if{latex}{\out{\hypertarget{method-generate}{}}}
+\if{html}{\out{<a id="method-ObservationGeneratorNormalAR1Err-generate"></a>}}
+\if{latex}{\out{\hypertarget{method-ObservationGeneratorNormalAR1Err-generate}{}}}
 \subsection{Method \code{generate()}}{
 Generates synthetic observations based on components of
   random (normally distributed) and autocorrelated error.
@@ -74,8 +74,8 @@ An object representing the synthetic observations
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-ObservationGeneratorNormalAR1Err-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-ObservationGeneratorNormalAR1Err-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

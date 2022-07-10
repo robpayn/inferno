@@ -35,25 +35,25 @@ function value}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{BayesLogLikelihood$new()}}
-\item \href{#method-propose}{\code{BayesLogLikelihood$propose()}}
-\item \href{#method-realize}{\code{BayesLogLikelihood$realize()}}
-\item \href{#method-compare}{\code{BayesLogLikelihood$compare()}}
-\item \href{#method-clone}{\code{BayesLogLikelihood$clone()}}
+\item \href{#method-BayesLogLikelihood-new}{\code{BayesLogLikelihood$new()}}
+\item \href{#method-BayesLogLikelihood-propose}{\code{BayesLogLikelihood$propose()}}
+\item \href{#method-BayesLogLikelihood-realize}{\code{BayesLogLikelihood$realize()}}
+\item \href{#method-BayesLogLikelihood-compare}{\code{BayesLogLikelihood$compare()}}
+\item \href{#method-BayesLogLikelihood-clone}{\code{BayesLogLikelihood$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="plotFit">}\href{../../inferno/html/ObjectiveFunction.html#method-plotFit}{\code{inferno::ObjectiveFunction$plotFit()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="setModel">}\href{../../inferno/html/ObjectiveFunction.html#method-setModel}{\code{inferno::ObjectiveFunction$setModel()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="setObservation">}\href{../../inferno/html/ObjectiveFunction.html#method-setObservation}{\code{inferno::ObjectiveFunction$setObservation()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="plotFit"><a href='../../inferno/html/ObjectiveFunction.html#method-ObjectiveFunction-plotFit'><code>inferno::ObjectiveFunction$plotFit()</code></a></li>
+<li><span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="setModel"><a href='../../inferno/html/ObjectiveFunction.html#method-ObjectiveFunction-setModel'><code>inferno::ObjectiveFunction$setModel()</code></a></li>
+<li><span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="setObservation"><a href='../../inferno/html/ObjectiveFunction.html#method-ObjectiveFunction-setObservation'><code>inferno::ObjectiveFunction$setObservation()</code></a></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-BayesLogLikelihood-new"></a>}}
+\if{latex}{\out{\hypertarget{method-BayesLogLikelihood-new}{}}}
 \subsection{Method \code{new()}}{
 Construct a new instance of the class
 \subsection{Usage}{
@@ -85,8 +85,8 @@ of the additional required and optional arguments.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-propose"></a>}}
-\if{latex}{\out{\hypertarget{method-propose}{}}}
+\if{html}{\out{<a id="method-BayesLogLikelihood-propose"></a>}}
+\if{latex}{\out{\hypertarget{method-BayesLogLikelihood-propose}{}}}
 \subsection{Method \code{propose()}}{
 Overrides the superclass propose method to call the base objective 
   function propose method, before adding the log of the prior probabilities
@@ -110,8 +110,8 @@ The value of the objective function
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-realize"></a>}}
-\if{latex}{\out{\hypertarget{method-realize}{}}}
+\if{html}{\out{<a id="method-BayesLogLikelihood-realize"></a>}}
+\if{latex}{\out{\hypertarget{method-BayesLogLikelihood-realize}{}}}
 \subsection{Method \code{realize()}}{
 Overrides the superclass realize method to be sure realize is called
   for the base objective function and the observation attribute is set
@@ -125,8 +125,8 @@ The synthetic observation created
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-compare"></a>}}
-\if{latex}{\out{\hypertarget{method-compare}{}}}
+\if{html}{\out{<a id="method-BayesLogLikelihood-compare"></a>}}
+\if{latex}{\out{\hypertarget{method-BayesLogLikelihood-compare}{}}}
 \subsection{Method \code{compare()}}{
 Compares a list of prediction vectors to an associated list of
   observation vectors based on a Bayesian posterior likelihood.
@@ -158,8 +158,8 @@ The log likelihood (will be negated if negate attribute is TRUE)
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-BayesLogLikelihood-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-BayesLogLikelihood-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

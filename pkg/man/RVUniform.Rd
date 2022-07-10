@@ -23,22 +23,22 @@ Provides tools for working with a random variable with
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{RVUniform$new()}}
-\item \href{#method-density}{\code{RVUniform$density()}}
-\item \href{#method-clone}{\code{RVUniform$clone()}}
+\item \href{#method-RVUniform-new}{\code{RVUniform$new()}}
+\item \href{#method-RVUniform-density}{\code{RVUniform$density()}}
+\item \href{#method-RVUniform-clone}{\code{RVUniform$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="inferno" data-topic="RandomVariable" data-id="markovStep">}\href{../../inferno/html/RandomVariable.html#method-markovStep}{\code{inferno::RandomVariable$markovStep()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="inferno" data-topic="RandomVariable" data-id="normalizedFit">}\href{../../inferno/html/RandomVariable.html#method-normalizedFit}{\code{inferno::RandomVariable$normalizedFit()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="inferno" data-topic="RandomVariable" data-id="markovStep"><a href='../../inferno/html/RandomVariable.html#method-RandomVariable-markovStep'><code>inferno::RandomVariable$markovStep()</code></a></li>
+<li><span class="pkg-link" data-pkg="inferno" data-topic="RandomVariable" data-id="normalizedFit"><a href='../../inferno/html/RandomVariable.html#method-RandomVariable-normalizedFit'><code>inferno::RandomVariable$normalizedFit()</code></a></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-RVUniform-new"></a>}}
+\if{latex}{\out{\hypertarget{method-RVUniform-new}{}}}
 \subsection{Method \code{new()}}{
 Construct a new instance of the class
 \subsection{Usage}{
@@ -56,8 +56,8 @@ Construct a new instance of the class
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-density"></a>}}
-\if{latex}{\out{\hypertarget{method-density}{}}}
+\if{html}{\out{<a id="method-RVUniform-density"></a>}}
+\if{latex}{\out{\hypertarget{method-RVUniform-density}{}}}
 \subsection{Method \code{density()}}{
 Method to provide the probability density for a given value in the 
    uniform distribution represented by the object
@@ -80,8 +80,8 @@ The probability density of the value requested (numeric vector).
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-RVUniform-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-RVUniform-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

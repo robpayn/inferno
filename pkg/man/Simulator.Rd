@@ -24,15 +24,15 @@ A simulator is designed to run a model based on a limited amount of
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Simulator$new()}}
-\item \href{#method-setModel}{\code{Simulator$setModel()}}
-\item \href{#method-simulate}{\code{Simulator$simulate()}}
-\item \href{#method-clone}{\code{Simulator$clone()}}
+\item \href{#method-Simulator-new}{\code{Simulator$new()}}
+\item \href{#method-Simulator-setModel}{\code{Simulator$setModel()}}
+\item \href{#method-Simulator-simulate}{\code{Simulator$simulate()}}
+\item \href{#method-Simulator-clone}{\code{Simulator$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Simulator-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Simulator-new}{}}}
 \subsection{Method \code{new()}}{
 Construct a new instance of the class
 \subsection{Usage}{
@@ -59,8 +59,8 @@ function value.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setModel"></a>}}
-\if{latex}{\out{\hypertarget{method-setModel}{}}}
+\if{html}{\out{<a id="method-Simulator-setModel"></a>}}
+\if{latex}{\out{\hypertarget{method-Simulator-setModel}{}}}
 \subsection{Method \code{setModel()}}{
 Set the model used by the simulator
 \subsection{Usage}{
@@ -77,8 +77,8 @@ from a given parameter set}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-simulate"></a>}}
-\if{latex}{\out{\hypertarget{method-simulate}{}}}
+\if{html}{\out{<a id="method-Simulator-simulate"></a>}}
+\if{latex}{\out{\hypertarget{method-Simulator-simulate}{}}}
 \subsection{Method \code{simulate()}}{
 Run a simulation based on the provided parameter values
 \subsection{Usage}{
@@ -98,8 +98,8 @@ The prediction representing the output of interest in the scenario
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Simulator-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Simulator-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

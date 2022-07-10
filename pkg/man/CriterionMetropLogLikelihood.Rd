@@ -12,19 +12,19 @@ Provides the ability to evaluate the criterion for a Metropolis algorithm
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-isAccepted}{\code{CriterionMetropLogLikelihood$isAccepted()}}
-\item \href{#method-clone}{\code{CriterionMetropLogLikelihood$clone()}}
+\item \href{#method-CriterionMetropLogLikelihood-isAccepted}{\code{CriterionMetropLogLikelihood$isAccepted()}}
+\item \href{#method-CriterionMetropLogLikelihood-clone}{\code{CriterionMetropLogLikelihood$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-isAccepted"></a>}}
-\if{latex}{\out{\hypertarget{method-isAccepted}{}}}
+\if{html}{\out{<a id="method-CriterionMetropLogLikelihood-isAccepted"></a>}}
+\if{latex}{\out{\hypertarget{method-CriterionMetropLogLikelihood-isAccepted}{}}}
 \subsection{Method \code{isAccepted()}}{
 Determine if the provided probability is acceptable or not
   using a Metropolis criterion
@@ -50,8 +50,8 @@ TRUE if accepted, FALSE otherwise
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-CriterionMetropLogLikelihood-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-CriterionMetropLogLikelihood-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

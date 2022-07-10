@@ -24,15 +24,15 @@ translator}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{ParameterTranslator$new()}}
-\item \href{#method-setModel}{\code{ParameterTranslator$setModel()}}
-\item \href{#method-translate}{\code{ParameterTranslator$translate()}}
-\item \href{#method-clone}{\code{ParameterTranslator$clone()}}
+\item \href{#method-ParameterTranslator-new}{\code{ParameterTranslator$new()}}
+\item \href{#method-ParameterTranslator-setModel}{\code{ParameterTranslator$setModel()}}
+\item \href{#method-ParameterTranslator-translate}{\code{ParameterTranslator$translate()}}
+\item \href{#method-ParameterTranslator-clone}{\code{ParameterTranslator$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-ParameterTranslator-new"></a>}}
+\if{latex}{\out{\hypertarget{method-ParameterTranslator-new}{}}}
 \subsection{Method \code{new()}}{
 Construct a new instance of the class
 \subsection{Usage}{
@@ -48,8 +48,8 @@ Construct a new instance of the class
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setModel"></a>}}
-\if{latex}{\out{\hypertarget{method-setModel}{}}}
+\if{html}{\out{<a id="method-ParameterTranslator-setModel"></a>}}
+\if{latex}{\out{\hypertarget{method-ParameterTranslator-setModel}{}}}
 \subsection{Method \code{setModel()}}{
 Set the model for which parameters are translated
 \subsection{Usage}{
@@ -66,8 +66,8 @@ the translate method.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-translate"></a>}}
-\if{latex}{\out{\hypertarget{method-translate}{}}}
+\if{html}{\out{<a id="method-ParameterTranslator-translate"></a>}}
+\if{latex}{\out{\hypertarget{method-ParameterTranslator-translate}{}}}
 \subsection{Method \code{translate()}}{
 A class that inherits from ParameterTranslator must implement a 
   "translate" method that will reconfigure the model input according
@@ -91,8 +91,8 @@ No defined return value
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-ParameterTranslator-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-ParameterTranslator-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

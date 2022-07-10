@@ -22,20 +22,20 @@ A observation generator for independent and normally
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{ObservationGeneratorNormalErr$new()}}
-\item \href{#method-generate}{\code{ObservationGeneratorNormalErr$generate()}}
-\item \href{#method-clone}{\code{ObservationGeneratorNormalErr$clone()}}
+\item \href{#method-ObservationGeneratorNormalErr-new}{\code{ObservationGeneratorNormalErr$new()}}
+\item \href{#method-ObservationGeneratorNormalErr-generate}{\code{ObservationGeneratorNormalErr$generate()}}
+\item \href{#method-ObservationGeneratorNormalErr-clone}{\code{ObservationGeneratorNormalErr$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-ObservationGeneratorNormalErr-new"></a>}}
+\if{latex}{\out{\hypertarget{method-ObservationGeneratorNormalErr-new}{}}}
 \subsection{Method \code{new()}}{
 Construct a new instance of the class
 \subsection{Usage}{
@@ -54,8 +54,8 @@ artifical error}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-generate"></a>}}
-\if{latex}{\out{\hypertarget{method-generate}{}}}
+\if{html}{\out{<a id="method-ObservationGeneratorNormalErr-generate"></a>}}
+\if{latex}{\out{\hypertarget{method-ObservationGeneratorNormalErr-generate}{}}}
 \subsection{Method \code{generate()}}{
 Generates synthetic observations based on normally-distributed
   and independent error.
@@ -76,8 +76,8 @@ An object representing the synthetic observations
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-ObservationGeneratorNormalErr-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-ObservationGeneratorNormalErr-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

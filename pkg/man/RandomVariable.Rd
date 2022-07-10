@@ -11,15 +11,15 @@ A class representing a random variable with a given distribution.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-density}{\code{RandomVariable$density()}}
-\item \href{#method-markovStep}{\code{RandomVariable$markovStep()}}
-\item \href{#method-normalizedFit}{\code{RandomVariable$normalizedFit()}}
-\item \href{#method-clone}{\code{RandomVariable$clone()}}
+\item \href{#method-RandomVariable-density}{\code{RandomVariable$density()}}
+\item \href{#method-RandomVariable-markovStep}{\code{RandomVariable$markovStep()}}
+\item \href{#method-RandomVariable-normalizedFit}{\code{RandomVariable$normalizedFit()}}
+\item \href{#method-RandomVariable-clone}{\code{RandomVariable$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-density"></a>}}
-\if{latex}{\out{\hypertarget{method-density}{}}}
+\if{html}{\out{<a id="method-RandomVariable-density"></a>}}
+\if{latex}{\out{\hypertarget{method-RandomVariable-density}{}}}
 \subsection{Method \code{density()}}{
 Provides the probability density for a given value in the 
    distribution of the random variable.
@@ -41,8 +41,8 @@ The probability density of the value requested
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-markovStep"></a>}}
-\if{latex}{\out{\hypertarget{method-markovStep}{}}}
+\if{html}{\out{<a id="method-RandomVariable-markovStep"></a>}}
+\if{latex}{\out{\hypertarget{method-RandomVariable-markovStep}{}}}
 \subsection{Method \code{markovStep()}}{
 Provides a new location in multivariate space based on a previous
    location provided as a vector of variable values
@@ -64,8 +64,8 @@ Next location in multivariate space
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-normalizedFit"></a>}}
-\if{latex}{\out{\hypertarget{method-normalizedFit}{}}}
+\if{html}{\out{<a id="method-RandomVariable-normalizedFit"></a>}}
+\if{latex}{\out{\hypertarget{method-RandomVariable-normalizedFit}{}}}
 \subsection{Method \code{normalizedFit()}}{
 Resets the variance statistics for the distribuiton that match
    the structure of provided data
@@ -86,8 +86,8 @@ The variance statistics providing the best fit of the
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-RandomVariable-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-RandomVariable-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

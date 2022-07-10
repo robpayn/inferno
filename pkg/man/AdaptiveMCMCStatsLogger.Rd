@@ -28,19 +28,19 @@ Logs the stats from a Markov Chain accept/reject algorithm. Stats
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{AdaptiveMCMCStatsLogger$new()}}
-\item \href{#method-buildLog}{\code{AdaptiveMCMCStatsLogger$buildLog()}}
-\item \href{#method-logAccepted}{\code{AdaptiveMCMCStatsLogger$logAccepted()}}
-\item \href{#method-logRejected}{\code{AdaptiveMCMCStatsLogger$logRejected()}}
-\item \href{#method-logFailedPredictions}{\code{AdaptiveMCMCStatsLogger$logFailedPredictions()}}
-\item \href{#method-writeFirstRow}{\code{AdaptiveMCMCStatsLogger$writeFirstRow()}}
-\item \href{#method-writeRow}{\code{AdaptiveMCMCStatsLogger$writeRow()}}
-\item \href{#method-clone}{\code{AdaptiveMCMCStatsLogger$clone()}}
+\item \href{#method-AdaptiveMCMCStatsLogger-new}{\code{AdaptiveMCMCStatsLogger$new()}}
+\item \href{#method-AdaptiveMCMCStatsLogger-buildLog}{\code{AdaptiveMCMCStatsLogger$buildLog()}}
+\item \href{#method-AdaptiveMCMCStatsLogger-logAccepted}{\code{AdaptiveMCMCStatsLogger$logAccepted()}}
+\item \href{#method-AdaptiveMCMCStatsLogger-logRejected}{\code{AdaptiveMCMCStatsLogger$logRejected()}}
+\item \href{#method-AdaptiveMCMCStatsLogger-logFailedPredictions}{\code{AdaptiveMCMCStatsLogger$logFailedPredictions()}}
+\item \href{#method-AdaptiveMCMCStatsLogger-writeFirstRow}{\code{AdaptiveMCMCStatsLogger$writeFirstRow()}}
+\item \href{#method-AdaptiveMCMCStatsLogger-writeRow}{\code{AdaptiveMCMCStatsLogger$writeRow()}}
+\item \href{#method-AdaptiveMCMCStatsLogger-clone}{\code{AdaptiveMCMCStatsLogger$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-AdaptiveMCMCStatsLogger-new"></a>}}
+\if{latex}{\out{\hypertarget{method-AdaptiveMCMCStatsLogger-new}{}}}
 \subsection{Method \code{new()}}{
 Construct a new instance of the class
 \subsection{Usage}{
@@ -64,8 +64,8 @@ Construct a new instance of the class
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-buildLog"></a>}}
-\if{latex}{\out{\hypertarget{method-buildLog}{}}}
+\if{html}{\out{<a id="method-AdaptiveMCMCStatsLogger-buildLog"></a>}}
+\if{latex}{\out{\hypertarget{method-AdaptiveMCMCStatsLogger-buildLog}{}}}
 \subsection{Method \code{buildLog()}}{
 Creates the data structures and files necessary to track
    the statistics through a data analysis
@@ -89,8 +89,8 @@ No defined return value
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-logAccepted"></a>}}
-\if{latex}{\out{\hypertarget{method-logAccepted}{}}}
+\if{html}{\out{<a id="method-AdaptiveMCMCStatsLogger-logAccepted"></a>}}
+\if{latex}{\out{\hypertarget{method-AdaptiveMCMCStatsLogger-logAccepted}{}}}
 \subsection{Method \code{logAccepted()}}{
 Create accepted log entries
 \subsection{Usage}{
@@ -109,8 +109,8 @@ No defined return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-logRejected"></a>}}
-\if{latex}{\out{\hypertarget{method-logRejected}{}}}
+\if{html}{\out{<a id="method-AdaptiveMCMCStatsLogger-logRejected"></a>}}
+\if{latex}{\out{\hypertarget{method-AdaptiveMCMCStatsLogger-logRejected}{}}}
 \subsection{Method \code{logRejected()}}{
 Create rejected log entries
 \subsection{Usage}{
@@ -129,8 +129,8 @@ No defined return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-logFailedPredictions"></a>}}
-\if{latex}{\out{\hypertarget{method-logFailedPredictions}{}}}
+\if{html}{\out{<a id="method-AdaptiveMCMCStatsLogger-logFailedPredictions"></a>}}
+\if{latex}{\out{\hypertarget{method-AdaptiveMCMCStatsLogger-logFailedPredictions}{}}}
 \subsection{Method \code{logFailedPredictions()}}{
 Create failed prediction log entries
 \subsection{Usage}{
@@ -149,8 +149,8 @@ No defined return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-writeFirstRow"></a>}}
-\if{latex}{\out{\hypertarget{method-writeFirstRow}{}}}
+\if{html}{\out{<a id="method-AdaptiveMCMCStatsLogger-writeFirstRow"></a>}}
+\if{latex}{\out{\hypertarget{method-AdaptiveMCMCStatsLogger-writeFirstRow}{}}}
 \subsection{Method \code{writeFirstRow()}}{
 Write the first row of output files
 \subsection{Usage}{
@@ -162,8 +162,8 @@ No defined return value
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-writeRow"></a>}}
-\if{latex}{\out{\hypertarget{method-writeRow}{}}}
+\if{html}{\out{<a id="method-AdaptiveMCMCStatsLogger-writeRow"></a>}}
+\if{latex}{\out{\hypertarget{method-AdaptiveMCMCStatsLogger-writeRow}{}}}
 \subsection{Method \code{writeRow()}}{
 Write a row to output files
 \subsection{Usage}{
@@ -182,8 +182,8 @@ No defined return value.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-AdaptiveMCMCStatsLogger-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-AdaptiveMCMCStatsLogger-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

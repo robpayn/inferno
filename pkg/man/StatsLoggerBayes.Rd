@@ -22,25 +22,25 @@ Extends \code{AdaptiveMCMCStatsLogger} to include stats specific to a Bayesian l
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-buildLog}{\code{StatsLoggerBayes$buildLog()}}
-\item \href{#method-logAccepted}{\code{StatsLoggerBayes$logAccepted()}}
-\item \href{#method-logRejected}{\code{StatsLoggerBayes$logRejected()}}
-\item \href{#method-clone}{\code{StatsLoggerBayes$clone()}}
+\item \href{#method-StatsLoggerBayes-buildLog}{\code{StatsLoggerBayes$buildLog()}}
+\item \href{#method-StatsLoggerBayes-logAccepted}{\code{StatsLoggerBayes$logAccepted()}}
+\item \href{#method-StatsLoggerBayes-logRejected}{\code{StatsLoggerBayes$logRejected()}}
+\item \href{#method-StatsLoggerBayes-clone}{\code{StatsLoggerBayes$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="inferno" data-topic="AdaptiveMCMCStatsLogger" data-id="initialize">}\href{../../inferno/html/AdaptiveMCMCStatsLogger.html#method-initialize}{\code{inferno::AdaptiveMCMCStatsLogger$initialize()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="inferno" data-topic="AdaptiveMCMCStatsLogger" data-id="logFailedPredictions">}\href{../../inferno/html/AdaptiveMCMCStatsLogger.html#method-logFailedPredictions}{\code{inferno::AdaptiveMCMCStatsLogger$logFailedPredictions()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="inferno" data-topic="AdaptiveMCMCStatsLogger" data-id="writeFirstRow">}\href{../../inferno/html/AdaptiveMCMCStatsLogger.html#method-writeFirstRow}{\code{inferno::AdaptiveMCMCStatsLogger$writeFirstRow()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="inferno" data-topic="AdaptiveMCMCStatsLogger" data-id="writeRow">}\href{../../inferno/html/AdaptiveMCMCStatsLogger.html#method-writeRow}{\code{inferno::AdaptiveMCMCStatsLogger$writeRow()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="inferno" data-topic="AdaptiveMCMCStatsLogger" data-id="initialize"><a href='../../inferno/html/AdaptiveMCMCStatsLogger.html#method-AdaptiveMCMCStatsLogger-initialize'><code>inferno::AdaptiveMCMCStatsLogger$initialize()</code></a></li>
+<li><span class="pkg-link" data-pkg="inferno" data-topic="AdaptiveMCMCStatsLogger" data-id="logFailedPredictions"><a href='../../inferno/html/AdaptiveMCMCStatsLogger.html#method-AdaptiveMCMCStatsLogger-logFailedPredictions'><code>inferno::AdaptiveMCMCStatsLogger$logFailedPredictions()</code></a></li>
+<li><span class="pkg-link" data-pkg="inferno" data-topic="AdaptiveMCMCStatsLogger" data-id="writeFirstRow"><a href='../../inferno/html/AdaptiveMCMCStatsLogger.html#method-AdaptiveMCMCStatsLogger-writeFirstRow'><code>inferno::AdaptiveMCMCStatsLogger$writeFirstRow()</code></a></li>
+<li><span class="pkg-link" data-pkg="inferno" data-topic="AdaptiveMCMCStatsLogger" data-id="writeRow"><a href='../../inferno/html/AdaptiveMCMCStatsLogger.html#method-AdaptiveMCMCStatsLogger-writeRow'><code>inferno::AdaptiveMCMCStatsLogger$writeRow()</code></a></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-buildLog"></a>}}
-\if{latex}{\out{\hypertarget{method-buildLog}{}}}
+\if{html}{\out{<a id="method-StatsLoggerBayes-buildLog"></a>}}
+\if{latex}{\out{\hypertarget{method-StatsLoggerBayes-buildLog}{}}}
 \subsection{Method \code{buildLog()}}{
 Overrides the superclass buildLog method to add the structures needed
   for tracking Bayesian specific statistics
@@ -64,8 +64,8 @@ No defined return value
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-logAccepted"></a>}}
-\if{latex}{\out{\hypertarget{method-logAccepted}{}}}
+\if{html}{\out{<a id="method-StatsLoggerBayes-logAccepted"></a>}}
+\if{latex}{\out{\hypertarget{method-StatsLoggerBayes-logAccepted}{}}}
 \subsection{Method \code{logAccepted()}}{
 Create accepted log entries
 \subsection{Usage}{
@@ -84,8 +84,8 @@ No defined return value
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-logRejected"></a>}}
-\if{latex}{\out{\hypertarget{method-logRejected}{}}}
+\if{html}{\out{<a id="method-StatsLoggerBayes-logRejected"></a>}}
+\if{latex}{\out{\hypertarget{method-StatsLoggerBayes-logRejected}{}}}
 \subsection{Method \code{logRejected()}}{
 Create rejected log entries
 \subsection{Usage}{
@@ -104,8 +104,8 @@ No defined return value
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-StatsLoggerBayes-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-StatsLoggerBayes-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

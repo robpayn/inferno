@@ -14,13 +14,13 @@ A selection criterion object can determine if a given proposal is
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-isAccepted}{\code{Criterion$isAccepted()}}
-\item \href{#method-clone}{\code{Criterion$clone()}}
+\item \href{#method-Criterion-isAccepted}{\code{Criterion$isAccepted()}}
+\item \href{#method-Criterion-clone}{\code{Criterion$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-isAccepted"></a>}}
-\if{latex}{\out{\hypertarget{method-isAccepted}{}}}
+\if{html}{\out{<a id="method-Criterion-isAccepted"></a>}}
+\if{latex}{\out{\hypertarget{method-Criterion-isAccepted}{}}}
 \subsection{Method \code{isAccepted()}}{
 Determine if the provided probability is acceptable or not
 
@@ -47,8 +47,8 @@ TRUE if accepted, FALSE otherwise
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Criterion-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Criterion-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

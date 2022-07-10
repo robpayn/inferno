@@ -9,13 +9,13 @@ Inferno classes use a Model interface to manipulate and run models.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-run}{\code{Model$run()}}
-\item \href{#method-clone}{\code{Model$clone()}}
+\item \href{#method-Model-run}{\code{Model$run()}}
+\item \href{#method-Model-clone}{\code{Model$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-run"></a>}}
-\if{latex}{\out{\hypertarget{method-run}{}}}
+\if{html}{\out{<a id="method-Model-run"></a>}}
+\if{latex}{\out{\hypertarget{method-Model-run}{}}}
 \subsection{Method \code{run()}}{
 A class that inherits from Model must implement a "run" method that will
   execute the model with its given configuration.
@@ -31,8 +31,8 @@ No required return value
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Model-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Model-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

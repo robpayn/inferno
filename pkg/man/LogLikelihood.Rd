@@ -27,25 +27,25 @@ The R6 class generator for a log likelihood objective function
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{LogLikelihood$new()}}
-\item \href{#method-compare}{\code{LogLikelihood$compare()}}
-\item \href{#method-clone}{\code{LogLikelihood$clone()}}
+\item \href{#method-LogLikelihood-new}{\code{LogLikelihood$new()}}
+\item \href{#method-LogLikelihood-compare}{\code{LogLikelihood$compare()}}
+\item \href{#method-LogLikelihood-clone}{\code{LogLikelihood$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="plotFit">}\href{../../inferno/html/ObjectiveFunction.html#method-plotFit}{\code{inferno::ObjectiveFunction$plotFit()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="propose">}\href{../../inferno/html/ObjectiveFunction.html#method-propose}{\code{inferno::ObjectiveFunction$propose()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="realize">}\href{../../inferno/html/ObjectiveFunction.html#method-realize}{\code{inferno::ObjectiveFunction$realize()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="setModel">}\href{../../inferno/html/ObjectiveFunction.html#method-setModel}{\code{inferno::ObjectiveFunction$setModel()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="setObservation">}\href{../../inferno/html/ObjectiveFunction.html#method-setObservation}{\code{inferno::ObjectiveFunction$setObservation()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="plotFit"><a href='../../inferno/html/ObjectiveFunction.html#method-ObjectiveFunction-plotFit'><code>inferno::ObjectiveFunction$plotFit()</code></a></li>
+<li><span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="propose"><a href='../../inferno/html/ObjectiveFunction.html#method-ObjectiveFunction-propose'><code>inferno::ObjectiveFunction$propose()</code></a></li>
+<li><span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="realize"><a href='../../inferno/html/ObjectiveFunction.html#method-ObjectiveFunction-realize'><code>inferno::ObjectiveFunction$realize()</code></a></li>
+<li><span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="setModel"><a href='../../inferno/html/ObjectiveFunction.html#method-ObjectiveFunction-setModel'><code>inferno::ObjectiveFunction$setModel()</code></a></li>
+<li><span class="pkg-link" data-pkg="inferno" data-topic="ObjectiveFunction" data-id="setObservation"><a href='../../inferno/html/ObjectiveFunction.html#method-ObjectiveFunction-setObservation'><code>inferno::ObjectiveFunction$setObservation()</code></a></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-LogLikelihood-new"></a>}}
+\if{latex}{\out{\hypertarget{method-LogLikelihood-new}{}}}
 \subsection{Method \code{new()}}{
 Constructs a new instance of the class
 \subsection{Usage}{
@@ -79,8 +79,8 @@ Default is TRUE (ignore NAs in calculation).}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-compare"></a>}}
-\if{latex}{\out{\hypertarget{method-compare}{}}}
+\if{html}{\out{<a id="method-LogLikelihood-compare"></a>}}
+\if{latex}{\out{\hypertarget{method-LogLikelihood-compare}{}}}
 \subsection{Method \code{compare()}}{
 Compares a list of prediction vectors to an associated list of
   observation vectors based on a formal log likelihood function
@@ -109,8 +109,8 @@ The log likelihood value from the comparison
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-LogLikelihood-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-LogLikelihood-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

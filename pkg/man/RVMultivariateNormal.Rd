@@ -27,22 +27,22 @@ zero values}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{RVMultivariateNormal$new()}}
-\item \href{#method-markovStep}{\code{RVMultivariateNormal$markovStep()}}
-\item \href{#method-normalizedFit}{\code{RVMultivariateNormal$normalizedFit()}}
-\item \href{#method-clone}{\code{RVMultivariateNormal$clone()}}
+\item \href{#method-RVMultivariateNormal-new}{\code{RVMultivariateNormal$new()}}
+\item \href{#method-RVMultivariateNormal-markovStep}{\code{RVMultivariateNormal$markovStep()}}
+\item \href{#method-RVMultivariateNormal-normalizedFit}{\code{RVMultivariateNormal$normalizedFit()}}
+\item \href{#method-RVMultivariateNormal-clone}{\code{RVMultivariateNormal$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="inferno" data-topic="RandomVariable" data-id="density">}\href{../../inferno/html/RandomVariable.html#method-density}{\code{inferno::RandomVariable$density()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="inferno" data-topic="RandomVariable" data-id="density"><a href='../../inferno/html/RandomVariable.html#method-RandomVariable-density'><code>inferno::RandomVariable$density()</code></a></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-RVMultivariateNormal-new"></a>}}
+\if{latex}{\out{\hypertarget{method-RVMultivariateNormal-new}{}}}
 \subsection{Method \code{new()}}{
 Construct a new instance of the class.
 \subsection{Usage}{
@@ -74,8 +74,8 @@ factor. Defaults to 1.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-markovStep"></a>}}
-\if{latex}{\out{\hypertarget{method-markovStep}{}}}
+\if{html}{\out{<a id="method-RVMultivariateNormal-markovStep"></a>}}
+\if{latex}{\out{\hypertarget{method-RVMultivariateNormal-markovStep}{}}}
 \subsection{Method \code{markovStep()}}{
 Provides a new location in multivariate space based on a previous
    location provided as a vector of variable values
@@ -97,8 +97,8 @@ Next location in multivariate space
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-normalizedFit"></a>}}
-\if{latex}{\out{\hypertarget{method-normalizedFit}{}}}
+\if{html}{\out{<a id="method-RVMultivariateNormal-normalizedFit"></a>}}
+\if{latex}{\out{\hypertarget{method-RVMultivariateNormal-normalizedFit}{}}}
 \subsection{Method \code{normalizedFit()}}{
 Resets the variance statistics for the distribuiton that match
    the structure of provided data
@@ -123,8 +123,8 @@ The variance statistics providing the best fit of the
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-RVMultivariateNormal-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-RVMultivariateNormal-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -12,13 +12,13 @@ Generates an artificial observation data set base on a model.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-generate}{\code{ObservationGenerator$generate()}}
-\item \href{#method-clone}{\code{ObservationGenerator$clone()}}
+\item \href{#method-ObservationGenerator-generate}{\code{ObservationGenerator$generate()}}
+\item \href{#method-ObservationGenerator-clone}{\code{ObservationGenerator$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-generate"></a>}}
-\if{latex}{\out{\hypertarget{method-generate}{}}}
+\if{html}{\out{<a id="method-ObservationGenerator-generate"></a>}}
+\if{latex}{\out{\hypertarget{method-ObservationGenerator-generate}{}}}
 \subsection{Method \code{generate()}}{
 A class that inherits from ObservationGenerator must implement a 
   "generate" method that will create the synthetic observations. 
@@ -41,8 +41,8 @@ An object representing the synthetic observation
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-ObservationGenerator-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-ObservationGenerator-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
